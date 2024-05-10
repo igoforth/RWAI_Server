@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package jobqueue;
+
+service JobQueueManager {
+  // Submits a new job to the queue
+  rpc SubmitJob (JobRequest) returns (JobResponse);
+  // Checks the status of a job
+  rpc CheckJobStatus (JobStatusRequest) returns (JobStatusResponse);
+  // Retrieves the result of a completed job
+  rpc RetrieveJobResult (JobResultRequest) returns (JobResultResponse);
+}
+
+// Job management messages
+message JobRequest {
+  string job_id = 1; // Client may specify or server may generate and return it
+  string job_type = 2; // Type of job, e.g., "description_generation"
+  bytes payload = 3; // Encoded data necessary for the job, could be any serialized data
+}
+
+message JobResponse {
+  string job_id = 1; // Echo or newly assigned job ID
+  bool accepted = 2; // Whether the job was accepted into the queue
+  string message = 3; // Additional message, e.g., "Accepted", "Rejected", or error information
+}
+
+message JobStatusRequest {
+  string job_id = 1;
+}
+
+message JobStatusResponse {
+  string job_id = 1;
+  string status = 2; // e.g., "Pending", "Running", "Completed", "Failed"
+  string message = 3; // Additional details about the job's status
+}
+
+message JobResultRequest {
+  string job_id = 1;
+}
+
+message JobResultResponse {
+  string job_id = 1;
+  bool success = 2;
+  bytes result = 3; // Result of the job, could be any serialized data
+  string message = 4; // Result message or error details
+}

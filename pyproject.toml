@@ -6,7 +6,9 @@ authors = [
     {name = "Ian Goforth", email = "ian.goforth@gmail.com"},
 ]
 dependencies = [
-    "grpclib[protobuf]>=0.4.7",
+    "protobuf>=5.27.0rc1",
+    "grpclib>=0.4.7",
+    "OpenAI-Python-Client>=0.1.0",
 ]
 requires-python = "==3.11.*"
 readme = "README.md"
@@ -18,5 +20,4 @@ distribution = false
 
 [tool.pdm.dev-dependencies]
 dev = [
-    "grpcio-tools>=1.63.0",
 ]

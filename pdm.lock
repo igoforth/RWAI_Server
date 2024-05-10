@@ -5,49 +5,43 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:1e811f3bf167dfea0825162b30663ee15629952b732ab373f96e5a52061d00c8"
+content_hash = "sha256:5fd705d8729dedf291f3651047b6f0d3327cae1753f4c9686bf0ee5b5600700c"
 
 [[package]]
-name = "grpcio"
-version = "1.63.0"
+name = "anyio"
+version = "4.3.0"
 requires_python = ">=3.8"
-summary = "HTTP/2-based RPC framework"
-groups = ["dev"]
-files = [
-    {file = "grpcio-1.63.0-cp311-cp311-linux_armv7l.whl", hash = "sha256:f28f8b2db7b86c77916829d64ab21ff49a9d8289ea1564a2b2a3a8ed9ffcccd3"},
-    {file = "grpcio-1.63.0-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:65bf975639a1f93bee63ca60d2e4951f1b543f498d581869922910a476ead2f5"},
-    {file = "grpcio-1.63.0-cp311-cp311-manylinux_2_17_aarch64.whl", hash = "sha256:b5194775fec7dc3dbd6a935102bb156cd2c35efe1685b0a46c67b927c74f0cfb"},
-    {file = "grpcio-1.63.0-cp311-cp311-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:e4cbb2100ee46d024c45920d16e888ee5d3cf47c66e316210bc236d5bebc42b3"},
-    {file = "grpcio-1.63.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:1ff737cf29b5b801619f10e59b581869e32f400159e8b12d7a97e7e3bdeee6a2"},
-    {file = "grpcio-1.63.0-cp311-cp311-musllinux_1_1_i686.whl", hash = "sha256:cd1e68776262dd44dedd7381b1a0ad09d9930ffb405f737d64f505eb7f77d6c7"},
-    {file = "grpcio-1.63.0-cp311-cp311-musllinux_1_1_x86_64.whl", hash = "sha256:93f45f27f516548e23e4ec3fbab21b060416007dbe768a111fc4611464cc773f"},
-    {file = "grpcio-1.63.0-cp311-cp311-win32.whl", hash = "sha256:878b1d88d0137df60e6b09b74cdb73db123f9579232c8456f53e9abc4f62eb3c"},
-    {file = "grpcio-1.63.0-cp311-cp311-win_amd64.whl", hash = "sha256:756fed02dacd24e8f488f295a913f250b56b98fb793f41d5b2de6c44fb762434"},
-    {file = "grpcio-1.63.0.tar.gz", hash = "sha256:f3023e14805c61bc439fb40ca545ac3d5740ce66120a678a3c6c2c55b70343d1"},
-]
-
-[[package]]
-name = "grpcio-tools"
-version = "1.63.0"
-requires_python = ">=3.8"
-summary = "Protobuf code generator for gRPC"
-groups = ["dev"]
+summary = "High level compatibility layer for multiple asynchronous event loop implementations"
+groups = ["default"]
 dependencies = [
-    "grpcio>=1.63.0",
-    "protobuf<6.0dev,>=5.26.1",
-    "setuptools",
+    "idna>=2.8",
+    "sniffio>=1.1",
 ]
 files = [
-    {file = "grpcio_tools-1.63.0-cp311-cp311-linux_armv7l.whl", hash = "sha256:4374c8beefec84f682c799b8df5ac4b217c09de6d69038ce16fc12dcd862fff8"},
-    {file = "grpcio_tools-1.63.0-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:d58a5aacee102858e49b1cc89b1ba1a020bb04f001df057e2b03fa11e6c636d1"},
-    {file = "grpcio_tools-1.63.0-cp311-cp311-manylinux_2_17_aarch64.whl", hash = "sha256:744952a560fdb060a5f9d467d130fde6dbfee2abb07143c87e9b17aae3c19d5a"},
-    {file = "grpcio_tools-1.63.0-cp311-cp311-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:c305274aa111412f5b8858242853e56c16ebcedc25d6a49ad615fd1b3ecd5971"},
-    {file = "grpcio_tools-1.63.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e952835e7b8f40204bceb2a96fc7bcb8b07ff45ca9d07266774bc429db1efead"},
-    {file = "grpcio_tools-1.63.0-cp311-cp311-musllinux_1_1_i686.whl", hash = "sha256:409613bb694308a1945256d1d05c3ef3497f9fbf7fd68bd8bed86d80d97df334"},
-    {file = "grpcio_tools-1.63.0-cp311-cp311-musllinux_1_1_x86_64.whl", hash = "sha256:b2d246eee3b2a6afe65362c22a98b0e6d805c227c2569c5616ad3bec619621dd"},
-    {file = "grpcio_tools-1.63.0-cp311-cp311-win32.whl", hash = "sha256:bc0e6af05f66b36186ad3467d46ecc0f51dc9fa366005e095f4aa7739c7bfcba"},
-    {file = "grpcio_tools-1.63.0-cp311-cp311-win_amd64.whl", hash = "sha256:3f138c822090e7c87ef6a5dce0a6c4fdf68a9472e6a936b70ac7be2371184abe"},
-    {file = "grpcio_tools-1.63.0.tar.gz", hash = "sha256:2474cffbc8f29404f0e3a2109c0a0423211ba93fe048b144e734f601ff391fc7"},
+    {file = "anyio-4.3.0-py3-none-any.whl", hash = "sha256:048e05d0f6caeed70d731f3db756d35dcc1f35747c8c403364a8332c630441b8"},
+    {file = "anyio-4.3.0.tar.gz", hash = "sha256:f75253795a87df48568485fd18cdd2a3fa5c4f7c5be8e5e36637733fce06fed6"},
+]
+
+[[package]]
+name = "attrs"
+version = "23.2.0"
+requires_python = ">=3.7"
+summary = "Classes Without Boilerplate"
+groups = ["default"]
+files = [
+    {file = "attrs-23.2.0-py3-none-any.whl", hash = "sha256:99b87a485a5820b23b879f04c2305b44b951b502fd64be915879d77a7e8fc6f1"},
+    {file = "attrs-23.2.0.tar.gz", hash = "sha256:935dc3b529c262f6cf76e50877d35a4bd3c1de194fd41f47a2b7ae8f19971f30"},
+]
+
+[[package]]
+name = "certifi"
+version = "2024.2.2"
+requires_python = ">=3.6"
+summary = "Python package for providing Mozilla's CA Bundle."
+groups = ["default"]
+files = [
+    {file = "certifi-2024.2.2-py3-none-any.whl", hash = "sha256:dc383c07b76109f368f6106eee2b593b04a011ea4d55f652c6ca24a754d1cdd1"},
+    {file = "certifi-2024.2.2.tar.gz", hash = "sha256:0569859f95fc761b18b45ef421b1290a0f65f147e92a1e5eb3e635f9a5e4e66f"},
 ]
 
 [[package]]
@@ -65,18 +59,14 @@ files = [
 ]
 
 [[package]]
-name = "grpclib"
-version = "0.4.7"
-extras = ["protobuf"]
+name = "h11"
+version = "0.14.0"
 requires_python = ">=3.7"
-summary = "Pure-Python gRPC implementation for asyncio"
+summary = "A pure-Python, bring-your-own-I/O implementation of HTTP/1.1"
 groups = ["default"]
-dependencies = [
-    "grpclib==0.4.7",
-    "protobuf>=3.20.0",
-]
 files = [
-    {file = "grpclib-0.4.7.tar.gz", hash = "sha256:2988ef57c02b22b7a2e8e961792c41ccf97efc2ace91ae7a5b0de03c363823c3"},
+    {file = "h11-0.14.0-py3-none-any.whl", hash = "sha256:e3fe4ac4b851c468cc8363d500db52c2ead036020723024a109d37346efaa761"},
+    {file = "h11-0.14.0.tar.gz", hash = "sha256:8f19fbbe99e72420ff35c00b27a34cb9937e902a8b810e2c88300c6f0a3b699d"},
 ]
 
 [[package]]
@@ -106,6 +96,39 @@ files = [
 ]
 
 [[package]]
+name = "httpcore"
+version = "1.0.5"
+requires_python = ">=3.8"
+summary = "A minimal low-level HTTP client."
+groups = ["default"]
+dependencies = [
+    "certifi",
+    "h11<0.15,>=0.13",
+]
+files = [
+    {file = "httpcore-1.0.5-py3-none-any.whl", hash = "sha256:421f18bac248b25d310f3cacd198d55b8e6125c107797b609ff9b7a6ba7991b5"},
+    {file = "httpcore-1.0.5.tar.gz", hash = "sha256:34a38e2f9291467ee3b44e89dd52615370e152954ba21721378a87b2960f7a61"},
+]
+
+[[package]]
+name = "httpx"
+version = "0.27.0"
+requires_python = ">=3.8"
+summary = "The next generation HTTP client."
+groups = ["default"]
+dependencies = [
+    "anyio",
+    "certifi",
+    "httpcore==1.*",
+    "idna",
+    "sniffio",
+]
+files = [
+    {file = "httpx-0.27.0-py3-none-any.whl", hash = "sha256:71d5465162c13681bff01ad59b2cc68dd838ea1f10e51574bac27103f00c91a5"},
+    {file = "httpx-0.27.0.tar.gz", hash = "sha256:a0cb88a46f32dc874e04ee956e4c2764aba2aa228f650b06788ba6bda2962ab5"},
+]
+
+[[package]]
 name = "hyperframe"
 version = "6.0.1"
 requires_python = ">=3.6.1"
@@ -114,6 +137,17 @@ groups = ["default"]
 files = [
     {file = "hyperframe-6.0.1-py3-none-any.whl", hash = "sha256:0ec6bafd80d8ad2195c4f03aacba3a8265e57bc4cff261e802bf39970ed02a15"},
     {file = "hyperframe-6.0.1.tar.gz", hash = "sha256:ae510046231dc8e9ecb1a6586f63d2347bf4c8905914aa84ba585ae85f28a914"},
+]
+
+[[package]]
+name = "idna"
+version = "3.7"
+requires_python = ">=3.5"
+summary = "Internationalized Domain Names in Applications (IDNA)"
+groups = ["default"]
+files = [
+    {file = "idna-3.7-py3-none-any.whl", hash = "sha256:82fee1fc78add43492d3a1898bfa6d8a904cc97d8427f683ed8e798d07761aa0"},
+    {file = "idna-3.7.tar.gz", hash = "sha256:028ff3aadf0609c1fd278d8ea3089299412a7a8b9bd005dd08b9f8285bcb5cfc"},
 ]
 
 [[package]]
@@ -143,28 +177,69 @@ files = [
 ]
 
 [[package]]
-name = "protobuf"
-version = "5.26.1"
-requires_python = ">=3.8"
-summary = ""
-groups = ["default", "dev"]
+name = "openai-python-client"
+version = "0.1.0"
+requires_python = "==3.11.*"
+summary = "A pure-python implementation built from OpenAPI-Python-Client Generator https://github.com/openapi-generators/openapi-python-client and OpenAI's published OpenAPI spec https://github.com/openai/openai-openapi"
+groups = ["default"]
+dependencies = [
+    "attrs>=23.2.0",
+    "httpx>=0.27.0",
+    "python-dateutil>=2.9.0.post0",
+]
 files = [
-    {file = "protobuf-5.26.1-cp310-abi3-win32.whl", hash = "sha256:3c388ea6ddfe735f8cf69e3f7dc7611e73107b60bdfcf5d0f024c3ccd3794e23"},
-    {file = "protobuf-5.26.1-cp310-abi3-win_amd64.whl", hash = "sha256:e6039957449cb918f331d32ffafa8eb9255769c96aa0560d9a5bf0b4e00a2a33"},
-    {file = "protobuf-5.26.1-cp37-abi3-macosx_10_9_universal2.whl", hash = "sha256:38aa5f535721d5bb99861166c445c4105c4e285c765fbb2ac10f116e32dcd46d"},
-    {file = "protobuf-5.26.1-cp37-abi3-manylinux2014_aarch64.whl", hash = "sha256:fbfe61e7ee8c1860855696e3ac6cfd1b01af5498facc6834fcc345c9684fb2ca"},
-    {file = "protobuf-5.26.1-cp37-abi3-manylinux2014_x86_64.whl", hash = "sha256:f7417703f841167e5a27d48be13389d52ad705ec09eade63dfc3180a959215d7"},
-    {file = "protobuf-5.26.1-py3-none-any.whl", hash = "sha256:da612f2720c0183417194eeaa2523215c4fcc1a1949772dc65f05047e08d5932"},
-    {file = "protobuf-5.26.1.tar.gz", hash = "sha256:8ca2a1d97c290ec7b16e4e5dff2e5ae150cc1582f55b5ab300d45cb0dfa90e51"},
+    {file = "OpenAI_Python_Client-0.1.0-py3-none-any.whl", hash = "sha256:3e7c820078ca9ab5dcd9d60744d26c9dc41e54fd9a26f030c2006ec8bdb184e3"},
+    {file = "openai_python_client-0.1.0.tar.gz", hash = "sha256:3e31350b8df9aba58dc9a3b9cdf0b981fa0d0e2a7826f5ea0dbd1598c5abfbb7"},
 ]
 
 [[package]]
-name = "setuptools"
-version = "69.5.1"
+name = "protobuf"
+version = "5.27.0rc1"
 requires_python = ">=3.8"
-summary = "Easily download, build, install, upgrade, and uninstall Python packages"
-groups = ["dev"]
+summary = ""
+groups = ["default"]
 files = [
-    {file = "setuptools-69.5.1-py3-none-any.whl", hash = "sha256:c636ac361bc47580504644275c9ad802c50415c7522212252c033bd15f301f32"},
-    {file = "setuptools-69.5.1.tar.gz", hash = "sha256:6c1fccdac05a97e598fb0ae3bbed5904ccb317337a51139dcd51453611bbb987"},
+    {file = "protobuf-5.27.0rc1-cp310-abi3-win32.whl", hash = "sha256:bc7e743f0ac97043478af49835a287aece40de68d2057cc53e96515e7d0d75b2"},
+    {file = "protobuf-5.27.0rc1-cp310-abi3-win_amd64.whl", hash = "sha256:71bf3ae763e1cd171d04a42fa0364d20ed77487553ebd9af7f25b32ec16bc88a"},
+    {file = "protobuf-5.27.0rc1-cp38-abi3-macosx_10_9_universal2.whl", hash = "sha256:92a829c6798ff9e0023f08aba7cb510ea369b89149f2cdcdfc0fcc1fc2d97d80"},
+    {file = "protobuf-5.27.0rc1-cp38-abi3-manylinux2014_aarch64.whl", hash = "sha256:942e03351ad7ae1e73869fed32eb121ddfa3a9292be0cd54da83d50084d5acb8"},
+    {file = "protobuf-5.27.0rc1-cp38-abi3-manylinux2014_x86_64.whl", hash = "sha256:aa1532f7f10a8fbc85d8d44bf3ce34f4128bf6f5f23a4f667e4d613021cfb5ac"},
+    {file = "protobuf-5.27.0rc1-py3-none-any.whl", hash = "sha256:f11e047ea94a8a2ce6feae83b6b2b009d91964ac26db80463942e383a4171da8"},
+    {file = "protobuf-5.27.0rc1.tar.gz", hash = "sha256:db7499e6ef7be1d9ca9b9609aefaab822decfd12f4dee3ce7d138d3cb8aba81e"},
+]
+
+[[package]]
+name = "python-dateutil"
+version = "2.9.0.post0"
+requires_python = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
+summary = "Extensions to the standard Python datetime module"
+groups = ["default"]
+dependencies = [
+    "six>=1.5",
+]
+files = [
+    {file = "python-dateutil-2.9.0.post0.tar.gz", hash = "sha256:37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3"},
+    {file = "python_dateutil-2.9.0.post0-py2.py3-none-any.whl", hash = "sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427"},
+]
+
+[[package]]
+name = "six"
+version = "1.16.0"
+requires_python = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
+summary = "Python 2 and 3 compatibility utilities"
+groups = ["default"]
+files = [
+    {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
+    {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
+]
+
+[[package]]
+name = "sniffio"
+version = "1.3.1"
+requires_python = ">=3.7"
+summary = "Sniff out which async library your code is running under"
+groups = ["default"]
+files = [
+    {file = "sniffio-1.3.1-py3-none-any.whl", hash = "sha256:2f6da418d1f1e0fddd844478f41680e794e6051915791a034ff65e5f100525a2"},
+    {file = "sniffio-1.3.1.tar.gz", hash = "sha256:f4324edc670a0f49750a81b895f35c3adb843cca46f0530f79fc1babb23789dc"},
 ]
