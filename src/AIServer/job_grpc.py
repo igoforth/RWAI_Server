@@ -4,14 +4,15 @@
 import abc
 import typing
 
-import grpclib.const
 import grpclib.client
+import grpclib.const
+
 if typing.TYPE_CHECKING:
     import grpclib.server
 
-import google.protobuf.duration_pb2
-import google.protobuf.timestamp_pb2
-import job_pb2
+from google.protobuf import duration_pb2, timestamp_pb2
+
+from . import job_pb2
 
 
 class JobManagerBase(abc.ABC):

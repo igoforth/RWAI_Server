@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:5fd705d8729dedf291f3651047b6f0d3327cae1753f4c9686bf0ee5b5600700c"
+content_hash = "sha256:4505107c8493d86d3798d239c4f90383bd61dee8c5c4545e7d12fb7ea6ab8d3b"
 
 [[package]]
 name = "anyio"
@@ -190,22 +190,6 @@ dependencies = [
 files = [
     {file = "OpenAI_Python_Client-0.1.0-py3-none-any.whl", hash = "sha256:3e7c820078ca9ab5dcd9d60744d26c9dc41e54fd9a26f030c2006ec8bdb184e3"},
     {file = "openai_python_client-0.1.0.tar.gz", hash = "sha256:3e31350b8df9aba58dc9a3b9cdf0b981fa0d0e2a7826f5ea0dbd1598c5abfbb7"},
-]
-
-[[package]]
-name = "protobuf"
-version = "5.27.0rc1"
-requires_python = ">=3.8"
-summary = ""
-groups = ["default"]
-files = [
-    {file = "protobuf-5.27.0rc1-cp310-abi3-win32.whl", hash = "sha256:bc7e743f0ac97043478af49835a287aece40de68d2057cc53e96515e7d0d75b2"},
-    {file = "protobuf-5.27.0rc1-cp310-abi3-win_amd64.whl", hash = "sha256:71bf3ae763e1cd171d04a42fa0364d20ed77487553ebd9af7f25b32ec16bc88a"},
-    {file = "protobuf-5.27.0rc1-cp38-abi3-macosx_10_9_universal2.whl", hash = "sha256:92a829c6798ff9e0023f08aba7cb510ea369b89149f2cdcdfc0fcc1fc2d97d80"},
-    {file = "protobuf-5.27.0rc1-cp38-abi3-manylinux2014_aarch64.whl", hash = "sha256:942e03351ad7ae1e73869fed32eb121ddfa3a9292be0cd54da83d50084d5acb8"},
-    {file = "protobuf-5.27.0rc1-cp38-abi3-manylinux2014_x86_64.whl", hash = "sha256:aa1532f7f10a8fbc85d8d44bf3ce34f4128bf6f5f23a4f667e4d613021cfb5ac"},
-    {file = "protobuf-5.27.0rc1-py3-none-any.whl", hash = "sha256:f11e047ea94a8a2ce6feae83b6b2b009d91964ac26db80463942e383a4171da8"},
-    {file = "protobuf-5.27.0rc1.tar.gz", hash = "sha256:db7499e6ef7be1d9ca9b9609aefaab822decfd12f4dee3ce7d138d3cb8aba81e"},
 ]
 
 [[package]]

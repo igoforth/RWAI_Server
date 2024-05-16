@@ -1,5 +1,7 @@
 import asyncio
+import functools
 import logging
+import os
 import pathlib
 import platform
 import signal
@@ -8,21 +10,33 @@ import traceback
 from collections import deque
 from time import monotonic
 
+os_name, os_release, os_version = platform.system(), platform.release(), platform.version()
+
+# logging
 logger  = logging.getLogger(__name__)
+# if (logger.hasHandlers()):
+#     logger.handlers.clear()
 logger.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+stderr_handler = logging.StreamHandler(sys.stderr)
+stderr_handler.setLevel(logger.getEffectiveLevel())
+stderr_handler.setFormatter(formatter)
+logger.addHandler(stderr_handler)
+logger.propagate = False
 
 # add to path "FILE/../../../__pypackages__/VERSION_SHORT/lib"
 mjr_mnr = ".".join(platform.python_version_tuple()[:2])
 new_path = str(pathlib.Path(__file__).parent.parent.parent / pathlib.Path(f"__pypackages__/{mjr_mnr}/lib"))
 sys.path.append(new_path)
-
-import Client
 # import Health
-import Server
+from . import Client, Server
 
 MAX_INTERVAL = 30
 RETRY_HISTORY = 3
-LLAMAFILE_EXE: str = "bin/llamafile"
+
+# ARGS
+LLAMAFILE_FILENAME = "llamafile.com" if os_name == 'Windows' else "llamafile"
+LLAMAFILE_PATH: pathlib.Path = pathlib.Path(os.getcwd()) / "bin" / LLAMAFILE_FILENAME
 LLAMAFILE_PARAMS_LIST: list[str] = [
     "--host", "127.0.0.1", "--port", "50052",
     "-ngl", "9999", "--server", "--nobrowser", "-cb",
@@ -30,43 +44,49 @@ LLAMAFILE_PARAMS_LIST: list[str] = [
     "--chat-template", r""" "{{ bos_token }}{% for message in messages %}{% if (message['role'] == 'user') %}{{'<|user|>' + '\n' + message['content'] + '<|end|>' + '\n' + '<|assistant|>' + '\n'}}{% elif (message['role'] == 'assistant') %}{{message['content'] + '<|end|>' + '\n'}}{% endif %}{% endfor %}" """.strip()
 ]
 
-async def run_forever(program: str, args: list[str], sleep_interval: int):
+async def run_llama_forever():
     """Capture output (stdout and stderr) while running external command."""
     proc = await asyncio.create_subprocess_exec(
-        program, *args, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
+        LLAMAFILE_PATH, *LLAMAFILE_PARAMS_LIST, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
 
-    while True:
-        if proc.stdout.at_eof() and proc.stderr.at_eof():
-            break
+    try:
+        while True:
+            if proc.stdout.at_eof() and proc.stderr.at_eof():
+                break
 
-        stdout = (await proc.stdout.readline()).decode()
-        if stdout:
-            logger.debug(f'[stdout] {stdout}', end='', flush=True)
-        stderr = (await proc.stderr.readline()).decode()
-        if stderr:
-            logger.debug(f'[sdterr] {stderr}', end='', flush=True, file=sys.stderr)
+            try:
+                out = await asyncio.wait_for(proc.stdout.read(2048), 0.1)
+            except asyncio.TimeoutError:
+                pass
+            else:
+                logger.debug(f'[stdout] {out.decode().strip()}')
+            try:
+                err = await asyncio.wait_for(proc.stderr.read(2048), 0.1)
+            except asyncio.TimeoutError:
+                pass
+            else:
+                logger.debug(f'[stderr] {err.decode().strip()}')
 
-        await asyncio.sleep(sleep_interval)
+    except asyncio.CancelledError:
+        logger.info("AI gracefully shut down")
+    finally:
+        await proc.communicate()
+        # logger.debug(f'{LLAMAFILE_PATH} {" ".join(LLAMAFILE_PARAMS_LIST)} exited with {proc.returncode}')
 
-    await proc.communicate()
-
-    logger.info(f'{program} {" ".join(args)} exited with {proc.returncode}')
-
-def supervise(loop: asyncio.BaseEventLoop, func, name=None, retry_history=RETRY_HISTORY, max_interval=MAX_INTERVAL):
+def supervise(func, name=None, retry_history=RETRY_HISTORY, max_interval=MAX_INTERVAL):
     """Simple wrapper function that automatically tries to name tasks"""
     if name is None:
         if hasattr(func, '__name__'): # raw func
             name = func.__name__
         elif hasattr(func, 'func'): # partial
             name = func.func.__name__
-    return loop.create_task(supervisor(func, retry_history, max_interval), name=name)
+    return asyncio.create_task(supervisor(func, name, retry_history, max_interval), name=name)
 
-async def supervisor(func, retry_history=RETRY_HISTORY, max_interval=MAX_INTERVAL):
+async def supervisor(func, name, retry_history=RETRY_HISTORY, max_interval=MAX_INTERVAL):
     """Takes a noargs function that creates a coroutine, and repeatedly tries
         to run it. It stops is if it thinks the coroutine is failing too often or
-        too fast.
-    """
+        too fast.  """
     start_times = deque([float('-inf')], maxlen=retry_history)
     while True:
         start_times.append(monotonic())
@@ -84,41 +104,48 @@ async def supervisor(func, retry_history=RETRY_HISTORY, max_interval=MAX_INTERVA
                 # see that it is set. However, here we just reraise the exception.
                 raise
             else:
-                logger.error(func.__name__, 'failed, will retry. Failed because:')
+                logger.error(name, 'failed, will retry. Failed because:')
                 traceback.print_exc()
 
+class GracefulExit(SystemExit):
+    code = 1
+
+def raise_graceful_exit(*args):
+    raise GracefulExit()
+
+async def main_async(iq, oq):
+    tasks = [
+        supervise(run_llama_forever),
+        supervise(functools.partial(Server.run, iq, oq)),
+        supervise(functools.partial(Client.run, iq, oq))
+    ]
+    await asyncio.wait(
+        tasks,
+        # Only stop when all coroutines have completed
+        # -- this allows for a graceful shutdown
+        # Alternatively use FIRST_EXCEPTION to stop immediately 
+        return_when=asyncio.ALL_COMPLETED,
+    )
+    return tasks
+
 def main():
-
-    class GracefulExit(SystemExit):
-        code = 1
-
-    def raise_graceful_exit(*args):
-        tasks = asyncio.all_tasks(loop=loop)
-        for t in tasks:
-            t.cancel()
-
-        loop.stop()
-        raise GracefulExit()
+    iq = asyncio.Queue()
+    oq = asyncio.Queue()
 
     # health_watcher = Health.HealthWatcher()
-    input_queue = asyncio.Queue()
-    output_queue = asyncio.Queue()
 
     loop = asyncio.get_event_loop()
     signal.signal(signal.SIGINT,  raise_graceful_exit)
     signal.signal(signal.SIGTERM, raise_graceful_exit)
-    supervise(loop, run_forever(LLAMAFILE_EXE, LLAMAFILE_PARAMS_LIST, sleep_interval = 5))
-    supervise(loop, Server.run(input_queue, output_queue))
-    supervise(loop, Client.run(input_queue, output_queue))
-    tasks = asyncio.all_tasks(loop=loop)
-    group = asyncio.gather(*tasks, return_exceptions=True)
 
     try:
-        loop.run_until_complete(group)
+        tasks = asyncio.ensure_future(main_async(iq, oq), loop=loop)
+        loop.run_until_complete(tasks)
     except GracefulExit:
-        print('Got signal: SIGINT, shutting down.')
-    if 1:
+        logger.info('Got signal: SIGINT, shutting down.')
+    finally:
+        tasks = asyncio.all_tasks(loop=loop)
         for t in tasks:
             t.cancel()
-        loop.run_until_complete(group)
+        loop.run_until_complete(asyncio.gather(*tasks, return_exceptions=True))
         loop.close()
