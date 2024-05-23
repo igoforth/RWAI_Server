@@ -41,9 +41,31 @@ from . import Client, Server
 MAX_INTERVAL = 30
 RETRY_HISTORY = 3
 
+
+def get_largest_file(directory: pathlib.Path) -> pathlib.Path:
+    # Initialize variables to store the name and size of the largest file
+    largest_file = pathlib.Path()
+    largest_size = 0
+
+    # Iterate over all files in the provided directory
+    for file in pathlib.Path(directory).rglob("*"):
+        if file.is_file():  # Ensure it is a file
+            file_size = file.stat().st_size
+
+            # Check if the current file is the largest so far
+            if file_size > largest_size:
+                largest_size = file_size
+                largest_file = file
+
+    return largest_file
+
+
 # ARGS
 LLAMAFILE_FILENAME = "llamafile.com" if os_name == "Windows" else "llamafile"
 LLAMAFILE_PATH: pathlib.Path = pathlib.Path(os.getcwd()) / "bin" / LLAMAFILE_FILENAME
+LLAMAFILE_MODEL: pathlib.Path = get_largest_file(
+    pathlib.Path(os.getcwd()) / "models"
+).relative_to(pathlib.Path(os.getcwd()))
 LLAMAFILE_PARAMS_LIST: list[str] = [
     "--host",
     "127.0.0.1",
@@ -55,7 +77,7 @@ LLAMAFILE_PARAMS_LIST: list[str] = [
     "--nobrowser",
     "-cb",
     "-m",
-    "models/Phi-3-mini-128k-instruct.Q4_K_M.gguf",
+    str(LLAMAFILE_MODEL),
     "--chat-template",
     r""" "{{ bos_token }}{% for message in messages %}{% if (message['role'] == 'user') %}{{'<|user|>' + '\n' + message['content'] + '<|end|>' + '\n' + '<|assistant|>' + '\n'}}{% elif (message['role'] == 'assistant') %}{{message['content'] + '<|end|>' + '\n'}}{% endif %}{% endfor %}" """.strip(),
 ]
