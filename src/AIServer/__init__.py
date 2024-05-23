@@ -156,8 +156,8 @@ async def supervisor(
                 # we tried our best, this coroutine really isn't working.
                 # We should try to shutdown gracefully by setting a global flag
                 # that other coroutines should periodically check and stop if they
-                # see that it is set. However, here we just reraise the exception.
-                raise
+                # see that it is set.
+                raise_graceful_exit()
             else:
                 logger.error(name, "failed, will retry. Failed because:")
                 traceback.print_exc()
