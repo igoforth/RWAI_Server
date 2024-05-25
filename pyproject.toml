@@ -1,6 +1,6 @@
 [project]
 name = "AIServer"
-version = "0.1.0"
+version = "0.2.0"
 description = "Default template for PDM package"
 authors = [
     {name = "Ian Goforth", email = "ian.goforth@gmail.com"},
@@ -9,7 +9,7 @@ dependencies = [
     "grpclib>=0.4.7",
     "OpenAI-Python-Client>=0.1.0",
 ]
-requires-python = "==3.11.*"
+requires-python = "==3.12.*"
 readme = "README.md"
 license = {text = "MIT"}
 
