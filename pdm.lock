@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:7de1c6e28d2437ea03eac3636d58100264954a8ec313e3ea0219027f6ca8bb45"
+content_hash = "sha256:4505107c8493d86d3798d239c4f90383bd61dee8c5c4545e7d12fb7ea6ab8d3b"
 
 [[package]]
 name = "anyio"
@@ -178,8 +178,8 @@ files = [
 
 [[package]]
 name = "openai-python-client"
-version = "0.2.0"
-requires_python = "==3.12.*"
+version = "0.1.0"
+requires_python = "==3.11.*"
 summary = "A pure-python implementation built from OpenAPI-Python-Client Generator https://github.com/openapi-generators/openapi-python-client and OpenAI's published OpenAPI spec https://github.com/openai/openai-openapi"
 groups = ["default"]
 dependencies = [
@@ -188,8 +188,8 @@ dependencies = [
     "python-dateutil>=2.9.0.post0",
 ]
 files = [
-    {file = "OpenAI_Python_Client-0.2.0-py3-none-any.whl", hash = "sha256:53bd503dcf789ce62cc7926a138b6020e4d7504cc1da8b38811dadb4291f1f77"},
-    {file = "openai_python_client-0.2.0.tar.gz", hash = "sha256:6fc55c0f5ee7c88a9469973379c79fc99bbf9a0db5eeebb3d45b44633dd2d74a"},
+    {file = "OpenAI_Python_Client-0.1.0-py3-none-any.whl", hash = "sha256:3e7c820078ca9ab5dcd9d60744d26c9dc41e54fd9a26f030c2006ec8bdb184e3"},
+    {file = "openai_python_client-0.1.0.tar.gz", hash = "sha256:3e31350b8df9aba58dc9a3b9cdf0b981fa0d0e2a7826f5ea0dbd1598c5abfbb7"},
 ]
 
 [[package]]

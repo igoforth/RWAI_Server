@@ -1,4 +1,5 @@
 import asyncio
+import collections
 import functools
 import logging
 import os
@@ -6,9 +7,8 @@ import pathlib
 import platform
 import signal
 import sys
+import time
 import traceback
-from collections import deque
-from time import monotonic
 
 os_name, os_release, os_version = (
     platform.system(),
@@ -142,13 +142,13 @@ async def supervisor(
     """Takes a noargs function that creates a coroutine, and repeatedly tries
     to run it. It stops is if it thinks the coroutine is failing too often or
     too fast."""
-    start_times = deque([float("-inf")], maxlen=retry_history)
+    start_times = collections.deque([float("-inf")], maxlen=retry_history)
     while True:
-        start_times.append(monotonic())
+        start_times.append(time.monotonic())
         try:
             return await func()
         except Exception:
-            if min(start_times) > monotonic() - max_interval:
+            if min(start_times) > time.monotonic() - max_interval:
                 logger.critical(
                     f"Failure in task {asyncio.current_task().get_name()!r}."
                     " Is it in a restart loop?"
