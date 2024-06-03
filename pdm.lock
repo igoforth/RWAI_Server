@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:4505107c8493d86d3798d239c4f90383bd61dee8c5c4545e7d12fb7ea6ab8d3b"
+content_hash = "sha256:5f0f63b45db0875a8976144d0d9fe0c37943c24833b07b6b808feda8a807780c"
 
 [[package]]
 name = "anyio"
@@ -34,6 +34,17 @@ files = [
 ]
 
 [[package]]
+name = "babel"
+version = "2.15.0"
+requires_python = ">=3.8"
+summary = "Internationalization utilities"
+groups = ["default"]
+files = [
+    {file = "Babel-2.15.0-py3-none-any.whl", hash = "sha256:08706bdad8d0a3413266ab61bd6c34d0c28d6e1e7badf40a2cebe67644e2e1fb"},
+    {file = "babel-2.15.0.tar.gz", hash = "sha256:8daf0e265d05768bc6c7a314cf1321e9a123afc328cc635c18622a2f30a04413"},
+]
+
+[[package]]
 name = "certifi"
 version = "2024.2.2"
 requires_python = ">=3.6"
@@ -45,17 +56,46 @@ files = [
 ]
 
 [[package]]
-name = "grpclib"
-version = "0.4.7"
-requires_python = ">=3.7"
-summary = "Pure-Python gRPC implementation for asyncio"
-groups = ["default"]
+name = "grpcio"
+version = "1.64.0"
+requires_python = ">=3.8"
+summary = "HTTP/2-based RPC framework"
+groups = ["default", "dev"]
+files = [
+    {file = "grpcio-1.64.0-cp311-cp311-linux_armv7l.whl", hash = "sha256:2a18090371d138a57714ee9bffd6c9c9cb2e02ce42c681aac093ae1e7189ed21"},
+    {file = "grpcio-1.64.0-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:59c68df3a934a586c3473d15956d23a618b8f05b5e7a3a904d40300e9c69cbf0"},
+    {file = "grpcio-1.64.0-cp311-cp311-manylinux_2_17_aarch64.whl", hash = "sha256:b52e1ec7185512103dd47d41cf34ea78e7a7361ba460187ddd2416b480e0938c"},
+    {file = "grpcio-1.64.0-cp311-cp311-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:8d598b5d5e2c9115d7fb7e2cb5508d14286af506a75950762aa1372d60e41851"},
+    {file = "grpcio-1.64.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:01615bbcae6875eee8091e6b9414072f4e4b00d8b7e141f89635bdae7cf784e5"},
+    {file = "grpcio-1.64.0-cp311-cp311-musllinux_1_1_i686.whl", hash = "sha256:0b2dfe6dcace264807d9123d483d4c43274e3f8c39f90ff51de538245d7a4145"},
+    {file = "grpcio-1.64.0-cp311-cp311-musllinux_1_1_x86_64.whl", hash = "sha256:7f17572dc9acd5e6dfd3014d10c0b533e9f79cd9517fc10b0225746f4c24b58e"},
+    {file = "grpcio-1.64.0-cp311-cp311-win32.whl", hash = "sha256:6ec5ed15b4ffe56e2c6bc76af45e6b591c9be0224b3fb090adfb205c9012367d"},
+    {file = "grpcio-1.64.0-cp311-cp311-win_amd64.whl", hash = "sha256:597191370951b477b7a1441e1aaa5cacebeb46a3b0bd240ec3bb2f28298c7553"},
+    {file = "grpcio-1.64.0.tar.gz", hash = "sha256:257baf07f53a571c215eebe9679c3058a313fd1d1f7c4eede5a8660108c52d9c"},
+]
+
+[[package]]
+name = "grpcio-tools"
+version = "1.64.0"
+requires_python = ">=3.8"
+summary = "Protobuf code generator for gRPC"
+groups = ["dev"]
 dependencies = [
-    "h2<5,>=3.1.0",
-    "multidict",
+    "grpcio>=1.64.0",
+    "protobuf<6.0dev,>=5.26.1",
+    "setuptools",
 ]
 files = [
-    {file = "grpclib-0.4.7.tar.gz", hash = "sha256:2988ef57c02b22b7a2e8e961792c41ccf97efc2ace91ae7a5b0de03c363823c3"},
+    {file = "grpcio_tools-1.64.0-cp311-cp311-linux_armv7l.whl", hash = "sha256:ff57dd9c87da6995039e04f76a6791ae46fec94d7531fe1403fd94a0e3d80cdd"},
+    {file = "grpcio_tools-1.64.0-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:8be1f77c8dab0412eb6cc596abac985cdf1c42608c921966cbb84d6d66f31b2c"},
+    {file = "grpcio_tools-1.64.0-cp311-cp311-manylinux_2_17_aarch64.whl", hash = "sha256:de5e1e7d4deaebfe16ea0c734bc933ddbdcacd04b980ab44e881c8ad3e88670a"},
+    {file = "grpcio_tools-1.64.0-cp311-cp311-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:d0118866227874203a2cd27ca9cf8d62cddf703449f009b548b9fee83594d12b"},
+    {file = "grpcio_tools-1.64.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:2aa82c4af0bac8940e429bf6bd4c029994ab85a963ddf62c0072116588fcf75b"},
+    {file = "grpcio_tools-1.64.0-cp311-cp311-musllinux_1_1_i686.whl", hash = "sha256:691369981d2f680bbf754ebde29a4fa630795543c565919558c178671d7e2a11"},
+    {file = "grpcio_tools-1.64.0-cp311-cp311-musllinux_1_1_x86_64.whl", hash = "sha256:99ab2be15a8027cb3c65e957c2f8bb7e596af954f399c4b1d257b34996860b36"},
+    {file = "grpcio_tools-1.64.0-cp311-cp311-win32.whl", hash = "sha256:f0e694b9f427e437bf60e1138d0ca9a7bee5b0ce1a6d70b1e1c3b99720692d4d"},
+    {file = "grpcio_tools-1.64.0-cp311-cp311-win_amd64.whl", hash = "sha256:087da41ee5f4cf8f0bed419d5ac59e06f07ff1109662724112bf3105fa168eb2"},
+    {file = "grpcio_tools-1.64.0.tar.gz", hash = "sha256:fa4c47897a0ddb78204456d002923294724e1b7fc87f0745528727383c2260ad"},
 ]
 
 [[package]]
@@ -67,32 +107,6 @@ groups = ["default"]
 files = [
     {file = "h11-0.14.0-py3-none-any.whl", hash = "sha256:e3fe4ac4b851c468cc8363d500db52c2ead036020723024a109d37346efaa761"},
     {file = "h11-0.14.0.tar.gz", hash = "sha256:8f19fbbe99e72420ff35c00b27a34cb9937e902a8b810e2c88300c6f0a3b699d"},
-]
-
-[[package]]
-name = "h2"
-version = "4.1.0"
-requires_python = ">=3.6.1"
-summary = "HTTP/2 State-Machine based protocol implementation"
-groups = ["default"]
-dependencies = [
-    "hpack<5,>=4.0",
-    "hyperframe<7,>=6.0",
-]
-files = [
-    {file = "h2-4.1.0-py3-none-any.whl", hash = "sha256:03a46bcf682256c95b5fd9e9a99c1323584c3eec6440d379b9903d709476bc6d"},
-    {file = "h2-4.1.0.tar.gz", hash = "sha256:a83aca08fbe7aacb79fec788c9c0bac936343560ed9ec18b82a13a12c28d2abb"},
-]
-
-[[package]]
-name = "hpack"
-version = "4.0.0"
-requires_python = ">=3.6.1"
-summary = "Pure-Python HPACK header compression"
-groups = ["default"]
-files = [
-    {file = "hpack-4.0.0-py3-none-any.whl", hash = "sha256:84a076fad3dc9a9f8063ccb8041ef100867b1878b25ef0ee63847a5d53818a6c"},
-    {file = "hpack-4.0.0.tar.gz", hash = "sha256:fc41de0c63e687ebffde81187a948221294896f6bdc0ae2312708df339430095"},
 ]
 
 [[package]]
@@ -129,17 +143,6 @@ files = [
 ]
 
 [[package]]
-name = "hyperframe"
-version = "6.0.1"
-requires_python = ">=3.6.1"
-summary = "HTTP/2 framing layer for Python"
-groups = ["default"]
-files = [
-    {file = "hyperframe-6.0.1-py3-none-any.whl", hash = "sha256:0ec6bafd80d8ad2195c4f03aacba3a8265e57bc4cff261e802bf39970ed02a15"},
-    {file = "hyperframe-6.0.1.tar.gz", hash = "sha256:ae510046231dc8e9ecb1a6586f63d2347bf4c8905914aa84ba585ae85f28a914"},
-]
-
-[[package]]
 name = "idna"
 version = "3.7"
 requires_python = ">=3.5"
@@ -151,35 +154,9 @@ files = [
 ]
 
 [[package]]
-name = "multidict"
-version = "6.0.5"
-requires_python = ">=3.7"
-summary = "multidict implementation"
-groups = ["default"]
-files = [
-    {file = "multidict-6.0.5-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:f285e862d2f153a70586579c15c44656f888806ed0e5b56b64489afe4a2dbfba"},
-    {file = "multidict-6.0.5-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:53689bb4e102200a4fafa9de9c7c3c212ab40a7ab2c8e474491914d2305f187e"},
-    {file = "multidict-6.0.5-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:612d1156111ae11d14afaf3a0669ebf6c170dbb735e510a7438ffe2369a847fd"},
-    {file = "multidict-6.0.5-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:7be7047bd08accdb7487737631d25735c9a04327911de89ff1b26b81745bd4e3"},
-    {file = "multidict-6.0.5-cp311-cp311-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:de170c7b4fe6859beb8926e84f7d7d6c693dfe8e27372ce3b76f01c46e489fcf"},
-    {file = "multidict-6.0.5-cp311-cp311-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:04bde7a7b3de05732a4eb39c94574db1ec99abb56162d6c520ad26f83267de29"},
-    {file = "multidict-6.0.5-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:85f67aed7bb647f93e7520633d8f51d3cbc6ab96957c71272b286b2f30dc70ed"},
-    {file = "multidict-6.0.5-cp311-cp311-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:425bf820055005bfc8aa9a0b99ccb52cc2f4070153e34b701acc98d201693733"},
-    {file = "multidict-6.0.5-cp311-cp311-musllinux_1_1_aarch64.whl", hash = "sha256:d3eb1ceec286eba8220c26f3b0096cf189aea7057b6e7b7a2e60ed36b373b77f"},
-    {file = "multidict-6.0.5-cp311-cp311-musllinux_1_1_i686.whl", hash = "sha256:7901c05ead4b3fb75113fb1dd33eb1253c6d3ee37ce93305acd9d38e0b5f21a4"},
-    {file = "multidict-6.0.5-cp311-cp311-musllinux_1_1_ppc64le.whl", hash = "sha256:e0e79d91e71b9867c73323a3444724d496c037e578a0e1755ae159ba14f4f3d1"},
-    {file = "multidict-6.0.5-cp311-cp311-musllinux_1_1_s390x.whl", hash = "sha256:29bfeb0dff5cb5fdab2023a7a9947b3b4af63e9c47cae2a10ad58394b517fddc"},
-    {file = "multidict-6.0.5-cp311-cp311-musllinux_1_1_x86_64.whl", hash = "sha256:e030047e85cbcedbfc073f71836d62dd5dadfbe7531cae27789ff66bc551bd5e"},
-    {file = "multidict-6.0.5-cp311-cp311-win32.whl", hash = "sha256:2f4848aa3baa109e6ab81fe2006c77ed4d3cd1e0ac2c1fbddb7b1277c168788c"},
-    {file = "multidict-6.0.5-cp311-cp311-win_amd64.whl", hash = "sha256:2faa5ae9376faba05f630d7e5e6be05be22913782b927b19d12b8145968a85ea"},
-    {file = "multidict-6.0.5-py3-none-any.whl", hash = "sha256:0d63c74e3d7ab26de115c49bffc92cc77ed23395303d496eae515d4204a625e7"},
-    {file = "multidict-6.0.5.tar.gz", hash = "sha256:f7e301075edaf50500f0b341543c41194d8df3ae5caf4702f2095f3ca73dd8da"},
-]
-
-[[package]]
 name = "openai-python-client"
-version = "0.1.0"
-requires_python = "==3.11.*"
+version = "0.2.3"
+requires_python = ">=3.11"
 summary = "A pure-python implementation built from OpenAPI-Python-Client Generator https://github.com/openapi-generators/openapi-python-client and OpenAI's published OpenAPI spec https://github.com/openai/openai-openapi"
 groups = ["default"]
 dependencies = [
@@ -188,8 +165,24 @@ dependencies = [
     "python-dateutil>=2.9.0.post0",
 ]
 files = [
-    {file = "OpenAI_Python_Client-0.1.0-py3-none-any.whl", hash = "sha256:3e7c820078ca9ab5dcd9d60744d26c9dc41e54fd9a26f030c2006ec8bdb184e3"},
-    {file = "openai_python_client-0.1.0.tar.gz", hash = "sha256:3e31350b8df9aba58dc9a3b9cdf0b981fa0d0e2a7826f5ea0dbd1598c5abfbb7"},
+    {file = "OpenAI_Python_Client-0.2.3-py3-none-any.whl", hash = "sha256:341cce11044a53fa95df10d0e33f0701bbfbdc9946a3028cc96465c76d80d056"},
+    {file = "openai_python_client-0.2.3.tar.gz", hash = "sha256:af569f3dfdd4dc0708b4d7d1a2cc9eed444a33e44a0767f8e9bb37fbfbf7fb7e"},
+]
+
+[[package]]
+name = "protobuf"
+version = "5.27.0"
+requires_python = ">=3.8"
+summary = ""
+groups = ["default", "dev"]
+files = [
+    {file = "protobuf-5.27.0-cp310-abi3-win32.whl", hash = "sha256:2f83bf341d925650d550b8932b71763321d782529ac0eaf278f5242f513cc04e"},
+    {file = "protobuf-5.27.0-cp310-abi3-win_amd64.whl", hash = "sha256:b276e3f477ea1eebff3c2e1515136cfcff5ac14519c45f9b4aa2f6a87ea627c4"},
+    {file = "protobuf-5.27.0-cp38-abi3-macosx_10_9_universal2.whl", hash = "sha256:744489f77c29174328d32f8921566fb0f7080a2f064c5137b9d6f4b790f9e0c1"},
+    {file = "protobuf-5.27.0-cp38-abi3-manylinux2014_aarch64.whl", hash = "sha256:f51f33d305e18646f03acfdb343aac15b8115235af98bc9f844bf9446573827b"},
+    {file = "protobuf-5.27.0-cp38-abi3-manylinux2014_x86_64.whl", hash = "sha256:56937f97ae0dcf4e220ff2abb1456c51a334144c9960b23597f044ce99c29c89"},
+    {file = "protobuf-5.27.0-py3-none-any.whl", hash = "sha256:673ad60f1536b394b4fa0bcd3146a4130fcad85bfe3b60eaa86d6a0ace0fa374"},
+    {file = "protobuf-5.27.0.tar.gz", hash = "sha256:07f2b9a15255e3cf3f137d884af7972407b556a7a220912b252f26dc3121e6bf"},
 ]
 
 [[package]]
@@ -204,6 +197,17 @@ dependencies = [
 files = [
     {file = "python-dateutil-2.9.0.post0.tar.gz", hash = "sha256:37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3"},
     {file = "python_dateutil-2.9.0.post0-py2.py3-none-any.whl", hash = "sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427"},
+]
+
+[[package]]
+name = "setuptools"
+version = "70.0.0"
+requires_python = ">=3.8"
+summary = "Easily download, build, install, upgrade, and uninstall Python packages"
+groups = ["dev"]
+files = [
+    {file = "setuptools-70.0.0-py3-none-any.whl", hash = "sha256:54faa7f2e8d2d11bcd2c07bed282eef1046b5c080d1c32add737d7b5817b1ad4"},
+    {file = "setuptools-70.0.0.tar.gz", hash = "sha256:f211a66637b8fa059bb28183da127d4e86396c991a942b028c6650d4319c3fd0"},
 ]
 
 [[package]]
