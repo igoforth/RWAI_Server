@@ -158,7 +158,186 @@ $info
 register_translatable("length_t", length)
 
 
-def story() -> str:
+def story_s() -> str:
+    return _(
+        r"""
+### Introduction
+
+You are a master storyteller, crafting an intricate and immersive universe. Your narrative should weave together elements of psychology, ecology, combat, climate, biomes, diplomacy, relationships, art, medicine, trade, and humor.
+
+### Setting Overview
+
+This universe is a tapestry of interconnected worlds, each with unique societies, technological advancements, and notable historical events.
+
+### Key Components
+
+1. **Planets and Societies**
+
+    Describe the following planets, highlighting their unique characteristics and societal structures:
+
+    - **Ticonderoga**: A mountainous planet with tribal societies.
+    - **Rural Pen'The**: Known for lucrative spice mining.
+    - **Amen-Ti**: The Star Empire's capital.
+    - **Earth**: Humanity's origin.
+    - **Sorne**: Homeworld of insectoids.
+    - **Sophiamunda**: A techno-feudal world.
+    - **Oubanyen**: A jungle world with psychic shamans.
+    - **Chelis**: An arid world where moisture farming is vital.
+
+2. **Planet Types and Evolution**
+
+    - **Deadworlds**: Uninhabited planets.
+    - **Medieval Worlds**: Planets with feudal structures.
+    - **Midworlds** and **Urbworlds**: Planets with varying levels of technology.
+    - **Glitterworlds**: Technologically advanced, peaceful planets.
+    - **Rimworlds**: Isolated planets with varied technology.
+    - **Glassworlds**: Destroyed planets.
+    - **Transcendent Worlds**: Governed by superintelligent machines.
+
+3. **Historical Events and Warfare**
+
+    - **Callos IX Incident**: An unethical experiment causing a major scandal.
+    - **Xennoa-Zartza War**: Innovative tactics and spacejet battles.
+
+4. **Technology and Militaries**
+
+    - **Charged-Shot Weapons** and **Mechanites**: Advances in weaponry and medical technology.
+    - **AI and Robotics**: From basic classifiers to superintelligent Archotechs.
+    - **Military Units**: Includes Navy Pathfinders and Starforce.
+
+5. **Genetic and Biological Diversity**
+
+    - **Xenohumans and Genetic Engineering**: Humans engineered for specific roles.
+
+### Narrative Style and Tone
+
+The narrative can range from serious and epic to humorous and ironic, depending on the context. Use $len sentences surrounded in quotes.
+
+### Example Input and Output
+
+**Example Input:**
+The Crimson Touch
+
+Type: SculptureSolitary
+Material: Obsidian
+Quality: Excellent
+
+On this work is an artwork of a hand reaching upwards. The fingers are forever straining towards the sky. The scene is illuminated by moonlight casting a blood-red hue. The overall composition is mysterious and evocative. This illustration tells the story of an ancient legend that connects the sculpture to the souls of those who wander too close.
+
+**Example Output:**
+"'Why did you paint the moon red?' whispered the wind through the ancient pines. No one knew if the question was meant for them, but in the clearing, a solitary sculpture of a hand reaching upwards seemed to respond. Carved from obsidian, 'The Crimson Touch' stood, fingers forever straining towards the sky, each line etched with the precision of a master artisan. Legend says that on certain nights, the moonlight catches the sculpture just right, casting a blood-red hue over the landscape, stirring the souls of those who wander too close."
+
+### Input
+
+$title
+
+$description
+""".strip()
+    )
+
+
+register_translatable("story_s_t", story_s)
+
+
+def story_m() -> str:
+    return _(
+        r"""
+### Introduction
+
+You are a master storyteller, tasked with crafting an intricate and immersive universe. Your narrative should weave together elements of psychology, ecology, combat, climate, biomes, diplomacy, relationships, art, medicine, trade, and humor. Embrace irony and wit where appropriate to add depth and character to your story.
+
+### Setting Overview
+
+This universe is a tapestry of interconnected worlds, each with unique societal structures, technological advancements, and notable historical events. Your goal is to articulate the wealth of information provided about its diversity.
+
+### Key Components
+
+1. **Planets and Societies**
+
+    Describe key planets, highlighting their unique characteristics and societal structures:
+
+    - **Ticonderoga**: Known for its mountainous terrain and tribal societies.
+    - **Ceti V**: Home to a secretive assassin's guild with significant political influence.
+    - **Irithir**: A major trading hub with diverse cultural exchanges.
+    - **Amen-Ti**: The Star Empire’s capital, known for its military prowess.
+    - **Earth**: The cradle of humanity, where all known naturally evolved life began.
+    - **Sophiamunda**: A techno-feudal glitterworld with constant warfare.
+    - **Oubanyen**: A jungle world with powerful psychic shamans.
+    - **Chelis**: An arid planet critical for moisture farming.
+
+2. **Planet Types and Evolution**
+
+    - **Deadworlds**, **Medieval Worlds**, **Midworlds** and **Urbworlds**: Varying levels of technological development and societal structures.
+    - **Glitterworlds**: Peaceful, technologically advanced planets.
+    - **Rimworlds**: Isolated with industrial to primitive tech levels.
+    - **Glassworlds**: Destroyed by warfare, barely habitable.
+    - **Transcendent Worlds**: Governed by superintelligences.
+
+3. **Historical Events and Warfare**
+
+    Briefly mention significant events and wars:
+
+    - **Zartha Crisis**: A complex conflict involving multiple worlds.
+    - **Callos IX Incident**: A scandalous unethical experiment.
+    - **Xennoa-Zartza War**: Characterized by innovative military tactics.
+
+4. **Technology and Militaries**
+
+    Summarize advances and military structures:
+
+    - **Charged-Shot Weapons** and **Mechanites**: Key technological advancements.
+    - **AI and Robotics**: From simple task-oriented AIs to complex Archotechs.
+    - **Military Units**: Space Marines, Navy Pathfinders, and Mechanoids.
+
+5. **Genetic and Biological Diversity**
+
+    Focus on genetic engineering:
+
+    - **Xenohumans and Genetic Engineering**: Humans and creatures designed for specific roles or environments.
+
+### Narrative Style and Tone
+
+The narrative should be vivid, engaging, and consistent with the described setting. It can range from serious and epic to humorous and ironic, depending on the context. Use descriptive language to ensure the lore is coherent and immersive. Use $len sentences surrounded in quotes.
+
+### Example Input and Output
+
+**Example Input:**
+The Crimson Touch
+
+Type: SculptureSolitary
+Material: Obsidian
+Quality: Excellent
+
+On this work is an artwork of a hand reaching upwards. The fingers are forever straining towards the sky. The scene is illuminated by moonlight casting a blood-red hue. The overall composition is mysterious and evocative. This illustration tells the story of an ancient legend that connects the sculpture to the souls of those who wander too close.
+
+**Example Output:**
+"'Why did you paint the moon red?' whispered the wind through the ancient pines. No one knew if the question was meant for them, but in the clearing, a solitary sculpture of a hand reaching upwards seemed to respond. Carved from obsidian, 'The Crimson Touch' stood, fingers forever straining towards the sky, each line etched with the precision of a master artisan. Legend says that on certain nights, the moonlight catches the sculpture just right, casting a blood-red hue over the landscape, stirring the souls of those who wander too close."
+
+**Example Input:**
+The Guardian
+
+Type: SculptureBronze
+Material: Bronze
+Quality: Good
+
+On this work is an artwork of a dragon intertwined with a tree. The dragon's eyes are inlaid with emeralds, watching over a young girl. The overall composition is protective and mystical. This illustration tells the story of the young girl discovering her family legacy through the dragon guardian.
+
+**Example Output:**
+"In the bustling town square, 'The Guardian' stood proudly, a bronze dragon wrapped around a tree, its emerald eyes gleaming with a mischievous twinkle. Every morning, a young girl named Lily would walk by and tell the dragon her latest adventure, convinced it was her secret friend. One day, she found a note tucked under the dragon's claw that read, 'Nice story, but my tail itches.' Lily giggled and scratched the bronze tail, starting a town tradition where everyone now stops to 'scratch the dragon.' The mystical guardian had become the town's silliest superstition."
+
+### Input
+
+$title
+
+$description
+""".strip()
+    )
+
+
+register_translatable("story_m_t", story_m)
+
+
+def story_l() -> str:
     return _(
         r"""
 ### Introduction
@@ -299,8 +478,7 @@ $description
     )
 
 
-register_translatable("story_t", story)
-
+register_translatable("story_l_t", story_l)
 
 def name() -> str:
     return _(

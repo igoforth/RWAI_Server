@@ -1,2 +1,2 @@
-root ::= [0-9]
+root ::= space [0-9] space
 space ::= " "?
