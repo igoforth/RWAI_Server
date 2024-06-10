@@ -169,7 +169,13 @@ class AIClient:
         # do random story length
         message: str = length_t.substitute(info=short_desc)  # type: ignore
         reply: str | None = await self.do_chat(message, grammar=self.grammar_digit)  # type: ignore
-        story_len: int = int(reply if reply else 4)  # default to 4 sentences
+        try:
+            if reply:
+                story_len: int = int(reply)
+            else:
+                story_len: int = 4  # default to 4 sentences
+        except ValueError:
+            story_len: int = 4
 
         # do story
         message: str = story_t.substitute(len=story_len, title=title, description=short_desc + "\n\n" + description)  # type: ignore
@@ -185,7 +191,7 @@ class AIClient:
         story = self.strip_quotes(story)
 
         # replace all mentions of old title with new title
-        story = story.replace(title, name)
+        story = story.replace(title, name).strip()
 
         # return result
         return JobResponse.ArtDescriptionResponse(
@@ -208,7 +214,7 @@ class AIClient:
             request.additional_properties["grammar"] = grammar
         request.additional_properties["dynatemp_range"] = 0.3
         request.additional_properties["repeat_penalty"] = 1.05
-        request.additional_properties["stop"] = ["<|end|>", "\n"]
+        request.additional_properties["stop"] = ["<|end|>", "<|endoftext|>", "\n"]
 
         logger.debug(f"Request:\n{request.to_dict()}")
         response: api.CreateChatCompletionResponse | None = await api.asyncio(
@@ -221,7 +227,11 @@ class AIClient:
         reply: str | None = response.choices[0].message.content
         if not reply:
             return None
-        return reply.replace("<|end|>", "").strip()
+        if "<|end|>" in reply:
+            reply = reply.replace("<|end|>", "")
+        if "<|endoftext|>" in reply:
+            reply = reply.replace("<|endoftext|>", "")
+        return reply.strip()
 
     # GET /health: Returns the current state of the server:
     # * {"status": "loading model"} if the model is still being loaded.
@@ -284,8 +294,8 @@ async def run(
         while client.ai_health != AIHealth.HEALTHY:
             await sleep(5)
             await client.check_ai_health()
+        await client.test_art_description_job()
         await client.start(input_queue, output_queue)
-        # await client.test_art_description_job()
         logger.info(f"Client connected to {HOST}:{PORT}")
     except CancelledError:
         await client.client.get_async_httpx_client().aclose()

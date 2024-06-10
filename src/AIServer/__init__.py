@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import argparse
 import collections
 import logging
 import os
@@ -25,7 +26,6 @@ os_name, os_release, os_version = (
 
 # logging
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
 formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
 stderr_handler = logging.StreamHandler(sys.stderr)
 stderr_handler.setLevel(logger.getEffectiveLevel())
@@ -33,6 +33,18 @@ stderr_handler.setFormatter(formatter)
 logger.addHandler(stderr_handler)
 logger.propagate = False
 
+# arg parsing
+parser = argparse.ArgumentParser(description="Set logger level")
+parser.add_argument(
+    "--loglevel",
+    choices=["DEBUG", "INFO", "WARNING"],
+    default="INFO",
+    help="Set the logging level",
+    type=str,
+    required=True,
+)
+args = parser.parse_args()
+logger.setLevel(args.loglevel)
 
 # import health
 from . import client, server
@@ -60,6 +72,11 @@ def get_largest_file(directory: pathlib.Path) -> pathlib.Path:
 
     return largest_file
 
+LLAMAFILE_TEMPLATES: dict[str, str] = {
+    "mini": r""" "{{ bos_token }}{% for message in messages %}{% if (message['role'] == 'user') %}{{'<|user|>' + '\n' + message['content'] + '<|end|>' + '\n' + '<|assistant|>' + '\n'}}{% elif (message['role'] == 'assistant') %}{{message['content'] + '<|end|>' + '\n'}}{% endif %}{% endfor %}" """.strip(),
+    "small": r""" "{{ bos_token }}{% for message in messages %}{{'<|' + message['role'] + '|>' + '\n' + message['content'] + '<|end|>\n' }}{% endfor %}{% if add_generation_prompt %}{{ '<|assistant|>\n' }}{% else %}{{ eos_token }}{% endif %}" """.strip(),
+    "medium": r""" "{% for message in messages %}{% if (message['role'] == 'user') %}{{'<|user|>' + '\n' + message['content'] + '<|end|>' + '\n' + '<|assistant|>' + '\n'}}{% elif (message['role'] == 'assistant') %}{{message['content'] + '<|end|>' + '\n'}}{% endif %}{% endfor %}" """.strip(),
+}
 
 # ARGS
 LLAMAFILE_FILENAME = "llamafile.com" if os_name == "Windows" else "llamafile"
@@ -67,23 +84,32 @@ LLAMAFILE_PATH: pathlib.Path = pathlib.Path(os.getcwd()) / "bin" / LLAMAFILE_FIL
 LLAMAFILE_MODEL: pathlib.Path = get_largest_file(
     pathlib.Path(os.getcwd()) / "models"
 ).relative_to(pathlib.Path(os.getcwd()))
-LLAMAFILE_PARAMS_LIST: list[str] = [
-    "--host",
-    "127.0.0.1",
-    "--port",
-    "50052",
-    "-ngl",
-    "9999",
-    "--server",
-    "--nobrowser",
-    "--chat-template",
-    "phi3",
-    "-c",
-    "4096",
-    "-cb",
-    "-m",
-    str(LLAMAFILE_MODEL),
-]
+LLAMAFILE_SIZE: str | None = next(
+    (key for key in ["medium", "small", "mini"] if key in str(LLAMAFILE_MODEL)),
+    None,
+)
+LLAMAFILE_TEMPLATE: str | None = LLAMAFILE_TEMPLATES.get(str(LLAMAFILE_SIZE), None)
+LLAMAFILE_PARAMS_LIST: list[str] = (
+    [
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "50052",
+        "-ngl",
+        "9999",
+        "--server",
+        "--nobrowser",
+    ]
+    + (["--chat-template", LLAMAFILE_TEMPLATE] if LLAMAFILE_TEMPLATE else [])
+    + [
+        "-c",
+        "4096",
+        "-cb",
+        "-m",
+        str(LLAMAFILE_MODEL),
+    ]
+)
+logger.debug(f"Executing with params: {' '.join(LLAMAFILE_PARAMS_LIST)}")
 
 
 async def run_llama_forever():
@@ -211,12 +237,9 @@ async def main_async(
     )
     return tasks
 
-
 def main():
     iq: Queue[tuple[int, JobRequest]] = Queue()
     oq: Queue[tuple[int, JobResponse]] = Queue()
-
-    # health_watcher = Health.HealthWatcher()
 
     loop = get_event_loop()
     signal.signal(signal.SIGINT, raise_graceful_exit)

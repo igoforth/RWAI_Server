@@ -264,7 +264,7 @@ Quality: Excellent
 On this work is an artwork of a hand reaching upwards. The fingers are forever straining towards the sky. The scene is illuminated by moonlight casting a blood-red hue. The overall composition is mysterious and evocative. This illustration tells the story of an ancient legend that connects the sculpture to the souls of those who wander too close.
 
 **Example Output:**
-"'Why did you paint the moon red?' whispered the wind through the ancient pines. No one knew if the question was meant for them, but in the clearing, a solitary sculpture of a hand reaching upwards seemed to respond. Carved from obsidian, "The Crimson Touch" stood, fingers forever straining towards the sky, each line etched with the precision of a master artisan. Legend says that on certain nights, the moonlight catches the sculpture just right, casting a blood-red hue over the landscape, stirring the souls of those who wander too close."
+"'Why did you paint the moon red?' whispered the wind through the ancient pines. No one knew if the question was meant for them, but in the clearing, a solitary sculpture of a hand reaching upwards seemed to respond. Carved from obsidian, 'The Crimson Touch' stood, fingers forever straining towards the sky, each line etched with the precision of a master artisan. Legend says that on certain nights, the moonlight catches the sculpture just right, casting a blood-red hue over the landscape, stirring the souls of those who wander too close."
 
 **Example Input:**
 The Guardian
