@@ -2,7 +2,7 @@
 
 ### Build
 
-Currently uses a pyz to run. It includes a custom loader (loader.py from repo RWAILib) to run platform-specific pythons and libraries. See the PEPs below for info.
+Currently uses a pyz to run. It includes a custom `loader.py` to run platform-specific pythons and libraries. See the PEPs below for info.
 
 https://peps.python.org/pep-0441/
 https://peps.python.org/pep-0711/
@@ -15,8 +15,8 @@ pdm pack -m AIServer:main -c --pyc --no-py
 # extract the resulting pyz to a folder
 mkdir build
 unzip AIServer.pyz build/
-# copy loader.py (from repo RWAILib) into directory replacing __main__.py
-cp ../loader.py build/__main__.py
+# copy loader.py into directory replacing __main__.py
+cp loader.py build/__main__.py
 
 # PATCHES
 # I had to vendor the protobuf library because their current release hasn't released a commit that removes reliance on ctypes yet
