@@ -10,6 +10,7 @@ import sys
 class PlatformPythonManager:
     import contextlib
     import pathlib
+    import typing
 
     system: str = ""
     machine: str = ""
@@ -114,6 +115,42 @@ class PlatformPythonManager:
             return windows_path
         return posix_path
 
+    @staticmethod
+    def stream_is_open(stream: typing.TextIO | typing.Any):
+        import os
+
+        try:
+            os.fstat(stream.fileno())
+            return True
+        except (AttributeError, ValueError, OSError):
+            return False
+
+    @staticmethod
+    def delete_existing_directories(base_dir: pathlib.Path):
+        import pathlib
+        import shutil
+
+        for path in pathlib.Path(".").iterdir():
+            if path.is_dir() and path.name.startswith(base_dir.stem):
+                shutil.rmtree(path, ignore_errors=False)
+
+    @staticmethod
+    def create_unique_time_dir_name(base_dir: pathlib.Path) -> pathlib.Path:
+        import datetime
+
+        PlatformPythonManager.delete_existing_directories(base_dir)
+
+        now = datetime.datetime.now()
+        dir_name = now.strftime("%H%M%S")
+        dir_path = base_dir.with_stem(f"{base_dir.stem}-{dir_name}")
+
+        while dir_path.exists():
+            now += datetime.timedelta(seconds=1)
+            dir_name = now.strftime("%H%M%S")
+            dir_path = base_dir.with_stem(f"{base_dir.stem}-{dir_name}")
+
+        return dir_path
+
     def extract(
         self,
         directory: pathlib.Path,
@@ -138,26 +175,25 @@ class PlatformPythonManager:
                         f"File or directory not found in zip: {directory_s}"
                     )
 
-        # Make cosmopolitan-compatible temp path
-        base_temp_dir_str = os.environ.get("TEMP")
-        if not base_temp_dir_str:
-            base_temp_dir = str(self.platform_path(pathlib.Path.cwd()))
-        else:
-            base_temp_dir = str(self.platform_path(pathlib.Path(base_temp_dir_str)))
-
+        # optimistic option
         if not out_dir:
+            # Make cosmopolitan-compatible temp path
+            base_temp_dir_str = os.environ.get("TEMP")
+            if not base_temp_dir_str:
+                base_temp_dir = str(self.platform_path(pathlib.Path.cwd()))
+            else:
+                base_temp_dir = str(self.platform_path(pathlib.Path(base_temp_dir_str)))
             # Create a temporary directory and register
             temp_dir: pathlib.Path = pathlib.Path(tempfile.mkdtemp(dir=base_temp_dir))
+        # compatible option
         else:
             temp_dir: pathlib.Path = pathlib.Path(out_dir)
             temp_dir.mkdir(exist_ok=True)
+
         if stack:
-            import gc
             import shutil
 
-            stack.callback(
-                lambda: (gc.collect(), shutil.rmtree(temp_dir, ignore_errors=True))
-            )
+            stack.callback(lambda: (shutil.rmtree(temp_dir, ignore_errors=True)))
 
         # Extract directory from zip file that app was run from
         with zipfile.ZipFile(sys.argv[0], "r") as zip_ref:
@@ -194,10 +230,13 @@ def main():
                 platform_manager.os_dir,
                 platform_manager.arch_dir,
             ]
+            unique_extract_dir_name = platform_manager.create_unique_time_dir_name(
+                pathlib.Path("platform-packages")
+            )
             lib_path, _ = platform_manager.extract(
                 pathlib.Path(*lib_path_parts),
                 stack=stack,
-                out_dir="platform-packages",
+                out_dir=str(unique_extract_dir_name),
             )
             sys.path.insert(0, str(lib_path))
 
@@ -206,14 +245,18 @@ def main():
     else:
         import contextlib
         import os
+        import pathlib
         import subprocess
 
         with contextlib.ExitStack() as stack:
             platform_python_path = platform_manager.get_platform_python_path()
+            unique_extract_dir_name = platform_manager.create_unique_time_dir_name(
+                pathlib.Path("python")
+            )
             platform_python, _ = platform_manager.extract(
                 platform_python_path,
                 stack=stack,
-                out_dir="python",
+                out_dir=str(unique_extract_dir_name),
             )
             platform_python_bin = platform_manager.get_platform_python_bin(
                 platform_python
@@ -232,12 +275,27 @@ def main():
                 process = subprocess.Popen(
                     new_args,
                     env=new_env,
-                    stdin=sys.stdin,
-                    stdout=sys.stdout,
-                    stderr=sys.stderr,
+                    stdin=(
+                        sys.stdin
+                        if platform_manager.stream_is_open(sys.stdin)
+                        else None
+                    ),
+                    stdout=(
+                        sys.stdout
+                        if platform_manager.stream_is_open(sys.stdout)
+                        else None
+                    ),
+                    stderr=(
+                        sys.stderr
+                        if platform_manager.stream_is_open(sys.stderr)
+                        else None
+                    ),
+                    close_fds=False if platform_manager.system == "windows" else True,
                 )
+
                 process.wait()
                 sys.exit(process.returncode)
+
             except KeyboardInterrupt:
                 if process:
                     import signal
@@ -245,7 +303,7 @@ def main():
                     try:
                         process.send_signal(signal.SIGINT)
                         process.wait()
-                        sys.exit(process.returncode)
+                        sys.exit(0)
                     except PermissionError:
                         pass
                     except Exception:

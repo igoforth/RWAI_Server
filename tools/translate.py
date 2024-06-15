@@ -1,5 +1,6 @@
 import asyncio
 import os
+import sys
 from pathlib import Path
 from time import time
 
@@ -23,7 +24,7 @@ last_request_time = 0
 
 
 # Function to translate text using OpenAI API with rate limiting
-async def translate_text(text: str, target_language: str):
+async def translate_text(text: str, target_language: str) -> str:
     global last_request_time
     async with semaphore:
         current_time = time()
@@ -46,7 +47,7 @@ async def translate_text(text: str, target_language: str):
             )
             return response.choices[0].message.content.strip()
         except Exception as e:
-            print(f"Error translating text: {e}")
+            print(f"Error translating text: {e}", file=sys.stderr)
             return text  # Fallback to original text on error
 
 
@@ -55,7 +56,7 @@ async def process_po_file(po_file: Path, target_language: str, indices_to_redo=N
     try:
         po = polib.pofile(str(po_file))
     except Exception as e:
-        print(f"Error reading .po file {po_file}: {e}")
+        print(f"Error reading .po file {po_file}: {e}", file=sys.stderr)
         return
 
     tasks = []

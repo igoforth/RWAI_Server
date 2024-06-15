@@ -213,7 +213,7 @@ async def supervisor(
 
 
 class GracefulExit(SystemExit):
-    code = 1
+    code = 0
 
 
 def raise_graceful_exit(*args):
@@ -249,8 +249,9 @@ def main():
     try:
         tasks = ensure_future(main_async(iq, oq), loop=loop)
         loop.run_until_complete(tasks)
-    except GracefulExit:
+    except GracefulExit as e:
         logger.info("Got signal: SIGINT, shutting down.")
+        sys.exit(e.code)
     finally:
         tasks = all_tasks(loop=loop)
         for t in tasks:

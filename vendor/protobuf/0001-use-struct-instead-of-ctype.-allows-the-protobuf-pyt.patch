@@ -1,0 +1,37 @@
+From 9de810acdc6e7e2bcac03d207632c0b9443596ea Mon Sep 17 00:00:00 2001
+From: Jie Luo <jieluo@google.com>
+Date: Mon, 6 May 2024 17:33:22 -0700
+Subject: [PATCH] use struct instead of ctype. allows the protobuf python
+ library to work on cpython 3.11's new wasm target [1] For
+ https://github.com/protocolbuffers/protobuf/pull/12212
+
+PiperOrigin-RevId: 631237602
+---
+ python/google/protobuf/internal/type_checkers.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/python/google/protobuf/internal/type_checkers.py b/python/google/protobuf/internal/type_checkers.py
+index e152a43f8..04ccc9850 100755
+--- a/python/google/protobuf/internal/type_checkers.py
++++ b/python/google/protobuf/internal/type_checkers.py
+@@ -22,7 +22,7 @@ TYPE_TO_DESERIALIZE_METHOD: A dictionary with field types and deserialization
+ 
+ __author__ = 'robinson@google.com (Will Robinson)'
+ 
+-import ctypes
++import struct
+ import numbers
+ 
+ from google.protobuf.internal import decoder
+@@ -34,7 +34,7 @@ _FieldDescriptor = descriptor.FieldDescriptor
+ 
+ 
+ def TruncateToFourByteFloat(original):
+-  return ctypes.c_float(original).value
++  return struct.unpack('<f', struct.pack('<f', original))[0]
+ 
+ 
+ def ToShortestFloat(original):
+-- 
+2.45.1.windows.1
+
