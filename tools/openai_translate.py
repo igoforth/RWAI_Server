@@ -3,6 +3,7 @@ import os
 import sys
 from pathlib import Path
 from time import time
+from typing import Any
 
 import aiofiles
 import openai
@@ -45,21 +46,25 @@ async def translate_text(text: str, target_language: str) -> str:
                     {"role": "user", "content": text},
                 ],
             )
-            return response.choices[0].message.content.strip()
+            return str(response.choices[0].message.content).strip()
         except Exception as e:
             print(f"Error translating text: {e}", file=sys.stderr)
             return text  # Fallback to original text on error
 
 
 # Process a single .po file
-async def process_po_file(po_file: Path, target_language: str, indices_to_redo=None):
+async def process_po_file(
+    po_file: Path,
+    target_language: str,
+    indices_to_redo: list[int] | None = None,
+):
     try:
         po = polib.pofile(str(po_file))
     except Exception as e:
         print(f"Error reading .po file {po_file}: {e}", file=sys.stderr)
         return
 
-    tasks = []
+    tasks: list[Any] = []
     for idx, entry in enumerate(po):
         if indices_to_redo is None or idx in indices_to_redo:
             tasks.append((entry, translate_text(entry.msgid, target_language)))
@@ -74,7 +79,7 @@ async def process_po_file(po_file: Path, target_language: str, indices_to_redo=N
 
 # Process all .po files in the directory
 async def process_all_po_files(locales_dir: Path):
-    tasks = []
+    tasks: list[Any] = []
     for lang_dir in locales_dir.iterdir():
         if lang_dir.is_dir() and lang_dir.name != SOURCE_LANGUAGE:
             target_language = lang_dir.name
@@ -84,7 +89,7 @@ async def process_all_po_files(locales_dir: Path):
 
 
 # Redo translations for specific languages and indices
-async def redo_translations(language: str, indices: list[int]):
+async def redo_translations(language: str, indices: list[int] | None = None):
     lang_dir = LOCALES_DIR / language
     if lang_dir.is_dir() and language != SOURCE_LANGUAGE:
         for po_file in lang_dir.rglob("*.po"):
@@ -93,8 +98,33 @@ async def redo_translations(language: str, indices: list[int]):
 
 # Main entry point
 if __name__ == "__main__":
-    # Example usage: redo translations for French language, indices 0 and 2
-    # asyncio.run(redo_translations("fr", [1, 2]))
+    # Example usage
+    # asyncio.run(redo_translations("ru"))
+    # asyncio.run(redo_translations("sv"))
+    # asyncio.run(redo_translations("pt_BR"))
+    asyncio.run(redo_translations("ar"))  # Arabic
+    asyncio.run(redo_translations("zh_Hans"))  # Chinese Simplified
+    asyncio.run(redo_translations("zh_Hant"))  # Chinese Traditional
+    asyncio.run(redo_translations("cs"))  # Czech
+    asyncio.run(redo_translations("da"))  # Danish
+    asyncio.run(redo_translations("nl"))  # Dutch
+    asyncio.run(redo_translations("et"))  # Estonian
+    asyncio.run(redo_translations("fi"))  # Finnish
+    asyncio.run(redo_translations("fr"))  # French
+    asyncio.run(redo_translations("de"))  # German
+    asyncio.run(redo_translations("hu"))  # Hungarian
+    asyncio.run(redo_translations("it"))  # Italian
+    asyncio.run(redo_translations("ja"))  # Japanese
+    asyncio.run(redo_translations("ko"))  # Korean
+    asyncio.run(redo_translations("no"))  # Norwegian
+    asyncio.run(redo_translations("pl"))  # Polish
+    asyncio.run(redo_translations("pt"))  # Portuguese
+    asyncio.run(redo_translations("ro"))  # Romanian
+    asyncio.run(redo_translations("sk"))  # Slovak
+    asyncio.run(redo_translations("es"))  # Spanish
+    asyncio.run(redo_translations("es_419"))  # Spanish Latin
+    asyncio.run(redo_translations("tr"))  # Turkish
+    asyncio.run(redo_translations("uk"))  # Ukrainian
 
     # Process all files
-    asyncio.run(process_all_po_files(LOCALES_DIR))
+    # asyncio.run(process_all_po_files(LOCALES_DIR))

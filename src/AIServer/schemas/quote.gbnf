@@ -1,2 +1,2 @@
-root ::= space "\"" [\U00000000-\U0010FFFF]+ "\"" space
-space ::= " "?
+root ::= ws "\"" [^\"]+ "\"" ws
+ws ::= [ \t]*

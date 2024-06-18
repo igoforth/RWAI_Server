@@ -1,2 +1,2 @@
-root ::= space [0-9] space
-space ::= " "?
+root ::= ws [0-9] ws
+ws ::= [ \t]*

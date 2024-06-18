@@ -30,6 +30,7 @@ def compile_translations(locales_dir: str, output_dir: str):
                 str(mo_path),
                 "-l",
                 lang,
+                "-f",
             ]
         )
 
