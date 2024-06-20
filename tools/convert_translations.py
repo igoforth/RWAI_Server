@@ -125,8 +125,15 @@ def compress_and_save_translations(base_path: Path, output_file: Path):
         for data in compressed_data_segments:
             name: str = data[0]
             compressed_bytes: bytes = data[1]
-            offset: int = metadata.get(name)["offset"]
-            length: int = metadata.get(name)["length"]
+            locale_metadata = metadata.get(name)
+            if locale_metadata is None:
+                raise RuntimeError("Locale metadata could not be determined")
+            offset: int | None = locale_metadata.get("offset")
+            if offset is None:
+                raise RuntimeError("Locale offset in metadata could not be determined")
+            length: int | None = locale_metadata.get("length")
+            if length is None:
+                raise RuntimeError("Locale length in metadata could not be determined")
             padding: int = align_to_page(length) - length
             print(
                 f"Going to write padding {padding} for lang {name} with length {length}"
@@ -134,6 +141,8 @@ def compress_and_save_translations(base_path: Path, output_file: Path):
             file.seek(offset)
             file.write(compressed_bytes)
             file.write(b"\x00" * padding)
+
+    print("Translation writes finished")
 
 
 def read_metadata_and_decompress_translation(output_file: Path, locale: str):
@@ -165,7 +174,7 @@ def read_metadata_and_decompress_translation(output_file: Path, locale: str):
         compressed_data = file.read(locale_info["length"])
         decompressed_data = zlib.decompress(compressed_data)
         translations = json.loads(decompressed_data.decode("utf-8"))
-        print(f"Translations for locale '{locale}':", translations)
+        # print(f"Translations for locale '{locale}':", translations)
 
         return translations
 
@@ -174,7 +183,7 @@ def read_metadata_and_decompress_translation(output_file: Path, locale: str):
 if __name__ == "__main__":
     base_path = Path.cwd() / "locales"  # Path where `.po` files are stored
     output_file = (
-        Path.cwd() / "translations.json.zlib"
+        Path.cwd() / "build" / "AIServer" / "translations.json.zlib"
     )  # Output file for compressed translations
 
     # Compress and save translations
@@ -182,4 +191,5 @@ if __name__ == "__main__":
 
     # Read a specific locale's translations
     locale = "ru"  # Example locale
+    print(f"Testing locale: {locale}")
     translations = read_metadata_and_decompress_translation(output_file, locale)
