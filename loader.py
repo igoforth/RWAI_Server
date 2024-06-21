@@ -34,17 +34,20 @@ class PlatformPythonManager:
                     else ""
                 )
             )
+        # elif self.system == "darwin":
+        #     self.os_dir = "darwin"
+        #     self.arch_dir = (
+        #         "x86_64"
+        #         if any(["x86_64" in self.machine, "amd64" in self.machine])
+        #         else (
+        #             "arm64"
+        #             if any(["arm64" in self.machine, "aarch64" in self.machine])
+        #             else ""
+        #         )
+        #     )
         elif self.system == "darwin":
             self.os_dir = "darwin"
-            self.arch_dir = (
-                "x86_64"
-                if any(["x86_64" in self.machine, "amd64" in self.machine])
-                else (
-                    "arm64"
-                    if any(["arm64" in self.machine, "aarch64" in self.machine])
-                    else ""
-                )
-            )
+            self.arch_dir = "universal2"
         elif self.system == "windows":
             self.os_dir = "windows"
             self.arch_dir = (
@@ -75,8 +78,10 @@ class PlatformPythonManager:
             raise RuntimeError(f"Failed to set executable permissions for {path}: {e}")
 
     def get_platform_python_bin(self, path: pathlib.Path):
-        if self.system in ["linux", "darwin"]:
-            path /= "bin/python"
+        if self.system == "linux":
+            path /= "bin/python3.11"
+        elif self.system == "darwin":
+            path /= "Python.framework/Versions/3.11/Python"
         elif self.system == "windows":
             path /= "python.exe"
         else:
@@ -238,11 +243,12 @@ def main():
             lib_path_parts = [
                 "platform-packages",
                 platform_manager.os_dir,
-                (
-                    platform_manager.arch_dir
-                    if platform_manager.system != "darwin"
-                    else "universal2"
-                ),
+                # (
+                #     platform_manager.arch_dir
+                #     if platform_manager.system != "darwin"
+                #     else "universal2"
+                # ),
+                platform_manager.arch_dir
             ]
             unique_extract_dir_name = platform_manager.create_unique_time_dir_name(
                 pathlib.Path("platform-packages")

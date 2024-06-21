@@ -11,7 +11,7 @@ import sys
 import time
 import traceback
 from asyncio import (ALL_COMPLETED, CancelledError, Queue, Task, TimeoutError,
-                     all_tasks, create_subprocess_exec, create_task,
+                     all_tasks, create_subprocess_exec, create_subprocess_shell, create_task,
                      current_task, ensure_future, gather, get_event_loop,
                      sleep, wait, wait_for)
 from asyncio.subprocess import DEVNULL, PIPE
@@ -122,12 +122,20 @@ async def run_llama_forever():
         stderr_filepath.touch()
     # stderr_file = open(stderr_filepath, "wb")
 
-    proc = await create_subprocess_exec(
-        LLAMAFILE_PATH,
-        *LLAMAFILE_PARAMS_LIST,
-        stdout=PIPE,
-        stderr=DEVNULL,
-    )
+    if os_name == "Windows":
+        proc = await create_subprocess_exec(
+            LLAMAFILE_PATH,
+            *LLAMAFILE_PARAMS_LIST,
+            stdout=PIPE,
+            stderr=DEVNULL,
+        )
+    else:
+        proc = await create_subprocess_shell(
+            " ".join([LLAMAFILE_PATH.as_posix()] +
+            LLAMAFILE_PARAMS_LIST),
+            stdout=PIPE,
+            stderr=DEVNULL,
+        )
     sleep_for: float = 0.5
 
     try:

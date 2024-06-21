@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:5f0f63b45db0875a8976144d0d9fe0c37943c24833b07b6b808feda8a807780c"
+content_hash = "sha256:ada5074cdd0af06756b6454d41ea0a50f0121cac0bed405e37181856c34edcd8"
 
 [[package]]
 name = "anyio"
@@ -167,6 +167,16 @@ dependencies = [
 files = [
     {file = "OpenAI_Python_Client-0.2.3-py3-none-any.whl", hash = "sha256:341cce11044a53fa95df10d0e33f0701bbfbdc9946a3028cc96465c76d80d056"},
     {file = "openai_python_client-0.2.3.tar.gz", hash = "sha256:af569f3dfdd4dc0708b4d7d1a2cc9eed444a33e44a0767f8e9bb37fbfbf7fb7e"},
+]
+
+[[package]]
+name = "polib"
+version = "1.2.0"
+summary = "A library to manipulate gettext files (po and mo files)."
+groups = ["dev"]
+files = [
+    {file = "polib-1.2.0-py2.py3-none-any.whl", hash = "sha256:1c77ee1b81feb31df9bca258cbc58db1bbb32d10214b173882452c73af06d62d"},
+    {file = "polib-1.2.0.tar.gz", hash = "sha256:f3ef94aefed6e183e342a8a269ae1fc4742ba193186ad76f175938621dbfc26b"},
 ]
 
 [[package]]
