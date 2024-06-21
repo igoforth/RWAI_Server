@@ -83,7 +83,7 @@ class PlatformPythonManager:
         elif self.system == "darwin":
             path /= "Python.framework/Versions/3.11/Python"
         elif self.system == "windows":
-            path /= "python.exe"
+            path /= "Scripts/python.exe"
         else:
             raise RuntimeError(f"Unsupported platform: {self.system} {self.machine}")
 
