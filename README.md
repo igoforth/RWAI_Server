@@ -2,13 +2,10 @@
 
 ### Build
 
-Currently uses a pyz to run. It includes a custom `loader.py` to run platform-specific pythons and libraries. See the PEP below for info.
+Currently uses a pyz to run. It includes a custom `loader.py` to run platform-specific pythons and libraries. See the PEPs below for info.
 
 https://peps.python.org/pep-0441/
-
-Packaged pythons come from indygreg's amazing repo
-
-https://github.com/indygreg/python-build-standalone/
+https://peps.python.org/pep-0711/
 
 You need python 3.11, pdm, and pdm-packer to build the project.
 
