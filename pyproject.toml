@@ -1,6 +1,6 @@
 [project]
 name = "AIServer"
-version = "0.2.0"
+version = "0.2.1"
 description = "Supporting python scripts for RWAI backend"
 authors = [
     {name = "Ian Goforth", email = "ian.goforth@gmail.com"},

@@ -144,7 +144,9 @@ class AIClient:
         description: str,
     ) -> str:
         # Generate story based on the size configuration
-        story_template_key = f"story_{LLAMAFILE_SIZE}_t"
+        story_template_key = (
+            f"story_{'mini' if LLAMAFILE_SIZE is None else LLAMAFILE_SIZE}_t"
+        )
         # the below languages are not well supported by the tokenizer, so we must use the "small" description if using the "medium" model
         if LLAMAFILE_SIZE == "medium" and language in [
             SupportedLanguage.RUSSIAN,

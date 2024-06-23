@@ -10,10 +10,24 @@ import signal
 import sys
 import time
 import traceback
-from asyncio import (ALL_COMPLETED, CancelledError, Queue, Task, TimeoutError,
-                     all_tasks, create_subprocess_exec, create_subprocess_shell, create_task,
-                     current_task, ensure_future, gather, get_event_loop,
-                     sleep, wait, wait_for)
+from asyncio import (
+    ALL_COMPLETED,
+    CancelledError,
+    Queue,
+    Task,
+    TimeoutError,
+    all_tasks,
+    create_subprocess_exec,
+    create_subprocess_shell,
+    create_task,
+    current_task,
+    ensure_future,
+    gather,
+    get_event_loop,
+    sleep,
+    wait,
+    wait_for,
+)
 from asyncio.subprocess import DEVNULL, PIPE
 from functools import partial
 from typing import Any, Coroutine
@@ -43,6 +57,14 @@ parser.add_argument(
     type=str,
     required=True,
 )
+parser.add_argument(
+    "--modelsize",
+    choices=["MEDIUM", "SMALL", "MINI", "CUSTOM"],
+    default=None,
+    help="Choose the model size to use",
+    type=str,
+    required=False,
+)
 args = parser.parse_args()
 logger.setLevel(args.loglevel)
 
@@ -55,22 +77,40 @@ MAX_INTERVAL = 30
 RETRY_HISTORY = 3
 
 
-def get_largest_file(directory: pathlib.Path) -> pathlib.Path:
-    # Initialize variables to store the name and size of the largest file
-    largest_file = pathlib.Path()
-    largest_size = 0
+def get_extreme_file(
+    directory: pathlib.Path, modelsize: str | None = None, find_largest: bool = True
+) -> pathlib.Path:
+    # Initialize variables to store the name and size of the extreme file
+    extreme_file = pathlib.Path()
+
+    if modelsize is not None:
+        modelsize = modelsize.lower()
+        if modelsize == "custom":
+            pattern = "*"
+        elif modelsize == "small":
+            find_largest = False
+            pattern = "*medium*"
+        else:
+            pattern = "*" + modelsize + "*"
+    else:
+        pattern = "*"
+
+    extreme_size = float("inf") if not find_largest else 0
 
     # Iterate over all files in the provided directory
-    for file in pathlib.Path(directory).rglob("*"):
+    for file in directory.rglob(pattern):
         if file.is_file():  # Ensure it is a file
             file_size = file.stat().st_size
 
-            # Check if the current file is the largest so far
-            if file_size > largest_size:
-                largest_size = file_size
-                largest_file = file
+            # Check if the current file is more extreme than the current one
+            if (find_largest and file_size > extreme_size) or (
+                not find_largest and file_size < extreme_size
+            ):
+                extreme_size = file_size
+                extreme_file = file
 
-    return largest_file
+    return extreme_file
+
 
 LLAMAFILE_TEMPLATES: dict[str, str] = {
     "mini": r""" "{% if not add_generation_prompt is defined %}{% set add_generation_prompt = false %}{% endif %}{% for message in messages %}{{'<|im_start|>' + message['role'] + '\n' + message['content'] + '<|im_end|>' + '\n'}}{% endfor %}{% if add_generation_prompt %}{{ '<|im_start|>assistant\n' }}{% endif %}" """.strip(),  # bootstrap downloads special "0.3" finetune with different template
@@ -82,14 +122,17 @@ LLAMAFILE_TEMPLATES: dict[str, str] = {
 # ARGS
 LLAMAFILE_FILENAME = "llamafile.com" if os_name == "Windows" else "llamafile"
 LLAMAFILE_PATH: pathlib.Path = pathlib.Path(os.getcwd()) / "bin" / LLAMAFILE_FILENAME
-LLAMAFILE_MODEL: pathlib.Path = get_largest_file(
-    pathlib.Path(os.getcwd()) / "models"
+LLAMAFILE_MODEL: pathlib.Path = get_extreme_file(
+    pathlib.Path(os.getcwd()) / "models", modelsize=args.modelsize
 ).relative_to(pathlib.Path(os.getcwd()))
 LLAMAFILE_SIZE: str | None = next(
     (key for key in ["medium", "small", "mini"] if key in str(LLAMAFILE_MODEL)),
     None,
 )
-LLAMAFILE_TEMPLATE: str | None = LLAMAFILE_TEMPLATES.get(str(LLAMAFILE_SIZE), None)
+LLAMAFILE_TEMPLATE: str | None = LLAMAFILE_TEMPLATES.get(
+    str("medium" if LLAMAFILE_SIZE == "small" else LLAMAFILE_SIZE),
+    None,  # specify medium because using smaller medium for small
+)
 LLAMAFILE_PARAMS_LIST: list[str] = (
     [
         "--host",
