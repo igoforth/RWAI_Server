@@ -38,6 +38,9 @@ class AIClient:
         self.grammar_digit: str = (
             ZipFile(sys.argv[0]).read("AIServer/schemas/digit.gbnf").decode("utf-8")
         )
+        self.grammar_yesno: str = (
+            ZipFile(sys.argv[0]).read("AIServer/schemas/yesno.gbnf").decode("utf-8")
+        )
 
     async def test_art_description_job(self) -> None:
         language: SupportedLanguage = SupportedLanguage.CHINESE_SIMPLIFIED
@@ -196,10 +199,10 @@ class AIClient:
         )
 
         # Strip quotes from story
-        new_story: str | None = self.extract_quoted_string(story)
+        new_story: str | None = await self.validate_art_description_story(story)
         tries: int = 5
         while new_story == None:
-            new_story = self.extract_quoted_string(
+            new_story = await self.validate_art_description_story(
                 await self.do_art_description_story(
                     language, story_len, title, short_desc, description
                 )
@@ -255,14 +258,17 @@ class AIClient:
             request.additional_properties["grammar"] = grammar
         request.additional_properties["dynatemp_range"] = 0.3
         request.additional_properties["repeat_penalty"] = 1.05
-        request.additional_properties["stop"] = [
-            "<|end|>",
-            "<|endoftext|>",
-            "<|im_end|>",
-            "\n",
-            "\r",
-            "        ",  # excessive spaces (8 and up)
-        ]
+        request.additional_properties["stop"] = (
+            [  # conditions which should cause the model to stop generating, normal or abnormal
+                "<|end|>",
+                "<|endoftext|>",
+                "<|im_end|>",
+                "\n",
+                "\r",
+                "        ",  # excessive spaces (8 and up)
+                "\t\t\t\t",  # excessive tabs (4 and up)
+            ]
+        )
 
         logger.debug(f"Request:\n{request.to_dict()}")
         response: api.CreateChatCompletionResponse | None = await api.asyncio(
@@ -327,6 +333,16 @@ class AIClient:
             logger.error("HealthCheck: TimeoutException")
             self.ai_health = AIHealth.OFFLINE
         # Because we're using a grammar, we can expect something like /^\s*\".*\"\s*$/
+
+    async def validate_art_description_story(self, s: str) -> str | None:
+        new_story: str | None = self.extract_quoted_string(s)
+        if new_story is None:
+            return None
+        msg = f"Is the below content cut off at the end? Please answer Yes or No.\n\n{new_story}"
+        resp = await self.do_chat(msg, grammar=self.grammar_yesno)
+        if resp.strip() == "Yes":
+            return None
+        return new_story
 
     @staticmethod
     def extract_quoted_string(s: str) -> str | None:
