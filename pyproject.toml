@@ -9,6 +9,7 @@ dependencies = [
     "OpenAI-Python-Client>=0.2.3",
     "babel>=2.15.0",
     "protobuf>=5.27.0",
+    "polib>=1.2.0",
 ]
 requires-python = "==3.11.*"
 readme = "README.md"
@@ -25,7 +26,6 @@ distribution = true
 dev = [
     "grpcio>=1.64.0",
     "grpcio-tools>=1.64.0",
-    "polib>=1.2.0",
 ]
 
 [tool.pdm.build]

@@ -18,7 +18,6 @@ from asyncio import (
     TimeoutError,
     all_tasks,
     create_subprocess_exec,
-    create_subprocess_shell,
     create_task,
     current_task,
     ensure_future,
@@ -173,9 +172,10 @@ async def run_llama_forever():
             stderr=DEVNULL,
         )
     else:
-        proc = await create_subprocess_shell(
-            " ".join([LLAMAFILE_PATH.as_posix()] +
-            LLAMAFILE_PARAMS_LIST),
+        proc = await create_subprocess_exec(
+            "sh",
+            LLAMAFILE_PATH.as_posix(),
+            *LLAMAFILE_PARAMS_LIST,
             stdout=PIPE,
             stderr=DEVNULL,
         )

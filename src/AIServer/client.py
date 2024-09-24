@@ -29,7 +29,6 @@ class AIClient:
         self.srv_host: str = srv_host
         self.srv_port: int = srv_port
         self.srv_url: str = f"http://{self.srv_host}:{self.srv_port}/v1"
-        self.client: Client = Client(self.srv_url, verify_ssl=False)
         self.health_interval: int = 15
         self.ai_health = AIHealth.UNKNOWN
         self.grammar_quotes: str = (
@@ -309,6 +308,7 @@ class AIClient:
     # * {"status": "ok"} if the model is successfully loaded and the server is ready for further requests mentioned below.
     async def check_ai_health(self) -> None:
         try:
+            self.client: Client = Client(self.srv_url, verify_ssl=False)
             r = await self.client.get_async_httpx_client().get(
                 url=urljoin(self.srv_url, "/health"), timeout=5
             )
@@ -326,8 +326,11 @@ class AIClient:
                     self.ai_health = AIHealth.UNKNOWN
             else:
                 self.ai_health = AIHealth.ERROR
+        except httpx.ConnectError:
+            logger.error("HealthCheck: ConnectException")
+            self.ai_health = AIHealth.OFFLINE
         except httpx.ReadError:
-            logger.error("HealthCheck: Read Exception")
+            logger.error("HealthCheck: ReadException")
             self.ai_health = AIHealth.OFFLINE
         except httpx.TimeoutException:
             logger.error("HealthCheck: TimeoutException")
@@ -361,10 +364,14 @@ async def run(
 ):
     global client
     client = AIClient(HOST, PORT)
+    tries = 0
     try:
         while client.ai_health != AIHealth.HEALTHY:
-            await sleep(5)
+            if tries == 5:
+                raise ConnectionError("Failed 5 times to connect to llamafile")
             await client.check_ai_health()
+            tries += 1
+            await sleep(5)
         # await client.test_art_description_job()
         logger.info(f"Client connected to {HOST}:{PORT}")
         await client.start(input_queue, output_queue)
