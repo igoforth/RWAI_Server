@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:fe7db0a8dc098f12c498ba2b1a56f3c4b3934d1e238b5df3707084b4c6edf572"
+content_hash = "sha256:b892196d35fbe20c3079222baf4af62ce4385308a2bd8cac64327a529d776b17"
 
 [[package]]
 name = "anyio"
@@ -173,7 +173,7 @@ files = [
 name = "polib"
 version = "1.2.0"
 summary = "A library to manipulate gettext files (po and mo files)."
-groups = ["dev"]
+groups = ["default"]
 files = [
     {file = "polib-1.2.0-py2.py3-none-any.whl", hash = "sha256:1c77ee1b81feb31df9bca258cbc58db1bbb32d10214b173882452c73af06d62d"},
     {file = "polib-1.2.0.tar.gz", hash = "sha256:f3ef94aefed6e183e342a8a269ae1fc4742ba193186ad76f175938621dbfc26b"},

@@ -119,7 +119,7 @@ LLAMAFILE_TEMPLATES: dict[str, str] = {
 }
 
 # ARGS
-LLAMAFILE_FILENAME = "llamafile.com" if os_name == "Windows" else "llamafile"
+LLAMAFILE_FILENAME = "llamafile.exe" if os_name == "Windows" else "llamafile"
 LLAMAFILE_PATH: pathlib.Path = pathlib.Path(os.getcwd()) / "bin" / LLAMAFILE_FILENAME
 LLAMAFILE_MODEL: pathlib.Path = get_extreme_file(
     pathlib.Path(os.getcwd()) / "models", modelsize=args.modelsize
