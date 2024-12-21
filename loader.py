@@ -322,7 +322,9 @@ def main():
 
                     try:
                         process.send_signal(signal.SIGINT)
-                        process.wait()
+                        process.wait(0.1)
+                        if process.returncode is None:
+                            process.kill()
                         sys.exit(0)
                     except PermissionError:
                         pass
