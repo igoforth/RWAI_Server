@@ -15,20 +15,15 @@ requires-python = "==3.11.*"
 readme = "README.md"
 license = {text = "MIT"}
 
-[build-system]
-requires = ["pdm-backend"]
-build-backend = "pdm.backend"
-
-[tool.pdm]
-distribution = true
-
-[tool.pdm.dev-dependencies]
+[dependency-groups]
 dev = [
     "grpcio>=1.64.0",
     "grpcio-tools>=1.64.0",
 ]
 
-[tool.pdm.build]
-is-purelib = true
-package-dir = "src"
-includes = ["src"]
+[build-system]
+requires = ["uv_build>=0.8.0,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "AIServer"

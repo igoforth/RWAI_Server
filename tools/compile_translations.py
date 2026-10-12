@@ -20,7 +20,7 @@ def compile_translations(locales_dir: str, output_dir: str):
 
         subprocess.run(
             [
-                "pdm",
+                "uv",
                 "run",
                 "pybabel",
                 "compile",

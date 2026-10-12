@@ -1,4 +1,4 @@
-# pdm run pybabel init -i locales/messages.pot -d locales -l uk
+# uv run pybabel init -i locales/messages.pot -d locales -l uk
 
 import subprocess
 from pathlib import Path
@@ -40,7 +40,7 @@ def compile_translations(locales_dir: str):
 
         subprocess.run(
             [
-                "pdm",
+                "uv",
                 "run",
                 "pybabel",
                 "init",
